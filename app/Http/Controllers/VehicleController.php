@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
@@ -30,9 +31,10 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $this->vehicle->create($request->all());
+        return redirect('/vehicles');
     }
 
     /**
@@ -47,24 +49,30 @@ class VehicleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit($id)
     {
-        //
+        $vehicle = $this->vehicle->find($id);
+        return view('vehicleUpdate', ['vehicle' => $vehicle]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update()
+    public function update(Request $request, $id)
     {
-        //
+        $vehicle = $this->vehicle->find($id);
+        $vehicle->fill($request->all());
+        $vehicle->save();
+        return redirect('/vehicles');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($id)
     {
-        //
+        $vehicle = $this->vehicle->find($id);
+        $vehicle->delete();
+        return redirect('/vehicles');
     }
 }

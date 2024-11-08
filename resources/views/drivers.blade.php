@@ -17,6 +17,7 @@
                         <td>{{$driver->name}}</td>
                         <td>{{$driver->cpf}}</td>
                         <td>{{$driver->phone}}</td>
+                        <td><a href="/driver/delete/{{$driver->id}}">Excluir</a></td>
                     </tr>
                 @empty
                     <tr>
@@ -26,4 +27,5 @@
             @endisset
         </tbody>
     </table>
+    <a href="/driver">Cadastrar Motorista</a>
 </div>

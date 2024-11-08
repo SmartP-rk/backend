@@ -22,7 +22,7 @@
             @isset($parks)
                 @forelse ($parks as $park)
                     <tr>
-                        <td><a href="/park/{{$park->id}}">{{$park->id}}</a></td>
+                        <td><a href="{{ route('park.find', $park->id) }}">{{$park->id}}</a></td>
                         <td>{{$park->name}}</td>
                         <td>{{$park->proprietor}}</td>
                         <td>{{$park->cnpj}}</td>
@@ -35,6 +35,7 @@
                         <td>{{$park->number}}</td>
                         <td>{{$park->complement}}</td>
                         <td>{{$park->vacancy_count}}</td>
+                        <td><a href="{{ route('park.delete', $park->id) }}">Deletar</a></td>
                     </tr>
                 @empty
                     <tr>
@@ -44,4 +45,5 @@
             @endisset
         </tbody>
     </table>
+    <a href="{{route('park.add.view')}}">Criar estacionamento</a>
 </div>

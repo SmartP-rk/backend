@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Park;
-use App\Http\Requests\StoreParkRequest;
-use App\Http\Requests\UpdateParkRequest;
+use Illuminate\Http\Request;
 
 class ParkController extends Controller
 {
@@ -21,15 +20,17 @@ class ParkController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        // dd($request->validate($this->park->rules()));
+        $this->park->create($request->all());
+        return redirect(route('park.all'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreParkRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -46,24 +47,29 @@ class ParkController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Park $park)
+    public function edit($id)
     {
-        //
+        $park = $this->park->find($id);
+        return view('parkUpdate', ['park' => $park]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateParkRequest $request, Park $park)
+    public function update(Request $request, $id)
     {
-        //
+        $park = $this->park->find($id);
+        $park->update($request->all());
+        return redirect(route('park.all'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Park $park)
+    public function destroy($id)
     {
-        //
+        $park = $this->park->find($id);
+        $park->delete();
+        return redirect(route('park.all'));
     }
 }

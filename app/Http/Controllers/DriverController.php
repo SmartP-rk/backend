@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
-use App\Http\Requests\StoreDriverRequest;
-use App\Http\Requests\UpdateDriverRequest;
+// use App\Http\Requests\StoreDriverRequest;
+// use App\Http\Requests\UpdateDriverRequest;
+use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
@@ -29,9 +30,10 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDriverRequest $request)
+    public function store(Request $request)
     {
-        //
+        $this->driver->create($request->all());
+        return redirect('/drivers');
     }
 
     /**
@@ -46,24 +48,30 @@ class DriverController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Driver $driver)
+    public function edit($id)
     {
-        //
+        $driver = $this->driver->find($id);
+        return view('driverUpdate', ['driver' => $driver]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDriverRequest $request, Driver $driver)
+    public function update(Request $request, $id)
     {
-        //
+        $driver = $this->driver->find($id);
+        $driver->fill($request->all());
+        $driver->save();
+        return redirect('/drivers');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Driver $driver)
+    public function destroy($id)
     {
-        //
+        $driver = $this->driver->find($id);
+        $driver->delete();
+        return redirect('/drivers');
     }
 }

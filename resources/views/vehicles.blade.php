@@ -25,6 +25,7 @@
                         <td>{{$vehicle->model}}</td>
                         <td>{{$vehicle->category}}</td>
                         <td>{{$vehicle->plate}}</td>
+                        <td><a href="/vehicle/delete/{{$vehicle->id}}">Deletar</a></td>
                     </tr>
                 @empty
                     <tr>
@@ -34,4 +35,5 @@
             @endisset
         </tbody>
     </table>
+    <a href="/vehicle">Cadastrar veiculo</a>
 </div>

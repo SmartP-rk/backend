@@ -7,4 +7,5 @@
         </ul>
     @endisset
     <a href="/drivers">Voltar</a>
+    <a href="/driverUpdate/{{$driver->id}}">Editar</a>
 </div>

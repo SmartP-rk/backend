@@ -15,5 +15,6 @@
             <li>{{$park->vacancy_count}}</li>
         </ul>
     @endisset
-    <a href="/parks">Voltar</a>
+    <a href="{{ route('park.all') }}">Voltar</a>
+    <a href="{{ route('park.update.view', $park->id) }}">Editar</a>
 </div>

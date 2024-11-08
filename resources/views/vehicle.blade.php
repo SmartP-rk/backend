@@ -11,4 +11,5 @@
         </ul>
     @endisset
     <a href="/vehicles">Voltar</a>
+    <a href="/vehicleUpdate/{{$vehicle->id}}">Editar</a>
 </div>
