@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Park;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreParkRequest;
+use App\Http\Requests\UpdateParkRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class ParkController extends Controller
 {
@@ -14,25 +17,19 @@ class ParkController extends Controller
     public function index()
     {
         $parks = $this->park->all();
-        return view('parks', ['parks' => $parks]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        // dd($request->validate($this->park->rules()));
-        $this->park->create($request->all());
-        return redirect(route('park.all'));
+        if($parks->isEmpty()){
+            return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
+        }
+        return response()->json( ['parks' => $parks], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreParkRequest $request)
     {
-        //
+        $park = $this->park->create($request->all());
+        return response()->json(['msg' => 'Estacionamento criado com sucesso', 'park' => $park], 201);
     }
 
     /**
@@ -41,26 +38,23 @@ class ParkController extends Controller
     public function show($id)
     {
         $park = $this->park->find($id);
-        return view('park', ['park' => $park]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $park = $this->park->find($id);
-        return view('parkUpdate', ['park' => $park]);
+        if($park === null){
+            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        }
+        return response()->json(['park' => $park], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateParkRequest $request, Park $park)
     {
-        $park = $this->park->find($id);
-        $park->update($request->all());
-        return redirect(route('park.all'));
+        if($park === null){
+            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        }
+        $park->fill($request->all());
+        $park->save();
+        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park], 200);
     }
 
     /**
@@ -69,7 +63,10 @@ class ParkController extends Controller
     public function destroy($id)
     {
         $park = $this->park->find($id);
+        if($park === null){
+            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        }
         $park->delete();
-        return redirect(route('park.all'));
+        return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
     }
 }

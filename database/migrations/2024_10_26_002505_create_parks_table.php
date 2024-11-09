@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('parks', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('proprietor');
             $table->string('cnpj');
-            $table->string('name');
             $table->string('phone');
             $table->string('zcode');
             $table->string('state');
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('neighborhood');
             $table->string('street');
             $table->string('number');
-            $table->string('complement');
+            $table->string('complement')->nullable();
             $table->integer('vacancy_count');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
