@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "a87485dd-c1e0-496e-9d78-bc33970f9d34",
+		"name": "vehicles",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25469066"
+	},
+	"item": [
+		{
+			"name": "localhost:8000/api/vehicles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8000/api/vehicles"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/vehicles/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8000/api/vehicles/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/vehicles",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "driver",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "color",
+							"value": "Branco",
+							"type": "text"
+						},
+						{
+							"key": "year",
+							"value": "2000",
+							"type": "text"
+						},
+						{
+							"key": "mark",
+							"value": "Peugeot",
+							"type": "text"
+						},
+						{
+							"key": "model",
+							"value": "208 Allure inconcert 1.5",
+							"type": "text"
+						},
+						{
+							"key": "category",
+							"value": "Normal",
+							"type": "text"
+						},
+						{
+							"key": "plate",
+							"value": "JVA-5950",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/vehicles"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/vehicles/2",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "driver",
+							"value": "2",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/vehicles/2"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/vehicles/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:8000/api/vehicles/1"
+			},
+			"response": []
+		}
+	]
+}
