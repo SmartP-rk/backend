@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreVehicleRequest;
+use App\Http\Requests\UpdateVehicleRequest;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
@@ -17,24 +19,19 @@ class VehicleController extends Controller
     public function index()
     {
         $vehicles = $this->vehicle->all();
-        return view('vehicles', ['vehicles' => $vehicles]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        if($vehicles->isEmpty()){
+            return response()->json(['error' => 'Não há veículos cadastrados'], 404);
+        }
+        return response()->json(['vehicles' => $vehicles], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreVehicleRequest $request)
     {
-        $this->vehicle->create($request->all());
-        return redirect('/vehicles');
+        $vehicle = $this->vehicle->create($request->all());
+        return response()->json(['msg' => 'Veículo criado com sucesso', 'vehicle' => $vehicle], 201);
     }
 
     /**
@@ -43,27 +40,24 @@ class VehicleController extends Controller
     public function show($id)
     {
         $vehicle = $this->vehicle->find($id);
-        return view('vehicle', ['vehicle' => $vehicle]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $vehicle = $this->vehicle->find($id);
-        return view('vehicleUpdate', ['vehicle' => $vehicle]);
+        if($vehicle === null){
+            return response()->json(['error' => 'Veículo não encontrado'], 404);
+        }
+        return response()->json(['vehicle' => $vehicle], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateVehicleRequest $request, $id)
     {
         $vehicle = $this->vehicle->find($id);
+        if($vehicle === null){
+            return response()->json(['error' => 'Veículo não encontrado'], 404);
+        }
         $vehicle->fill($request->all());
         $vehicle->save();
-        return redirect('/vehicles');
+        return response()->json(['msg' => 'Veículo atualizado com sucesso', 'vehicle' => $vehicle], 200);
     }
 
     /**
@@ -72,7 +66,10 @@ class VehicleController extends Controller
     public function destroy($id)
     {
         $vehicle = $this->vehicle->find($id);
+        if($vehicle === null){
+            return response()->json(['error' => 'Veículo não encontrado'], 404);
+        }
         $vehicle->delete();
-        return redirect('/vehicles');
+        return response()->json(['msg' => 'Veículo excluído com sucesso'], 200);
     }
 }
