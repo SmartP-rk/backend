@@ -45,6 +45,7 @@ class StoreUserRequest extends FormRequest
             'cpf.min' => 'O CPF deve ter no minímo 11 caracteres',
             'cpf.max' => 'O CPF deve ter no máximo 14 caracteres',
             'cpf.regex' => 'Insira um CPF válido. Ex: 000.000.000-00',
+            'cpf.unique' => 'Por favor insira um CPF válido',
             'phone.required' => 'O campo telefone é obrigatório',
             'phone.min' => 'O telefone deve ter no minímo 11',
             'phone.max' => 'O telefone deve ter no máximo 15',

@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "46d7336f-d358-4ad9-b473-cf9b9c47add2",
+		"name": "drivers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25469066"
+	},
+	"item": [
+		{
+			"name": "localhost:8000/api/drivers",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Fulano",
+							"type": "text"
+						},
+						{
+							"key": "cpf",
+							"value": "000.000.000-00",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "(53)99912-1321",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/drivers"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/drivers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8000/api/drivers"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/drivers/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8000/api/drivers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/drivers/1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Beltrano",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "53999131455",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/drivers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/drivers/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:8000/api/drivers/1"
+			},
+			"response": []
+		}
+	]
+}
