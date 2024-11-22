@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request){
         $user = $this->user->create($request->all());
-        return response()->json(['user' => $user], 201);
+        return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
     }
 
     public function show(User $user){
