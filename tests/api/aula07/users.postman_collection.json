@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "c915f6da-2a27-4890-b27b-66ce8a2d4f1b",
+		"name": "users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25469066"
+	},
+	"item": [
+		{
+			"name": "localhost:8000/api/users/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "21|maXPzBx1f6gjNG0jdXte99o1LyjjSAAJwH31fokE39fad62e"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "localhost:8000/api/users/2"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/users/2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "localhost:8000/api/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/users",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Matheus",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "teste@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "!123Matheus",
+							"type": "text"
+						},
+						{
+							"key": "cpf",
+							"value": "000.000.000-11",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "53999375038",
+							"type": "text"
+						},
+						{
+							"key": "user_type",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/users"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/users/1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": "localhost:8000/api/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "matheus@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "!123Matheus",
+							"type": "text"
+						}
+					]
+				},
+				"url": "localhost:8000/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "17|916a3822fbcae03a87e98c3e257b8ca04933af8178bddd3896991b46aecaa306"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "localhost:8000/api/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/destruct-all-tokens",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "20|1oMVd6LxbrKv6ZNkZAlwIDqwGXZHYfte6uWHOwFO8baf7e99"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "localhost:8000/api/destruct-all-tokens"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8000/api/refresh-token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "21|maXPzBx1f6gjNG0jdXte99o1LyjjSAAJwH31fokE39fad62e"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "localhost:8000/api/refresh-token"
+			},
+			"response": []
+		}
+	]
+}
