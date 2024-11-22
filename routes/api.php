@@ -19,3 +19,5 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('drivers', DriverController::class);
 Route::apiResource('parks', ParkController::class);
 Route::apiResource('vehicles', VehicleController::class);
+
+Route::post('login', [UserController::class, 'login']);

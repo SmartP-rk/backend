@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -32,5 +34,17 @@ class UserController extends Controller
     public function destroy(User $user){
         $user->delete();
         return response()->json(['msg' => 'Usuário excluído com sucesso'], 200);
+    }
+
+    public function login(LoginRequest $loginRequest){
+        if(Auth::attempt($loginRequest->only('email', 'password'))){
+            //(Dentro dos parenteses vai o nome do token)
+            $token = $loginRequest->user()->createToken($loginRequest->email)->plainTextToken;
+            return response()->json([
+                'msg' => 'Usuário autenticado com sucesso',
+                'user' => $loginRequest->user(), 'token' => $token
+            ], 200);
+        }
+        return response()->json(['msg' => 'Email ou senha incorretos!'], 401);
     }
 }
