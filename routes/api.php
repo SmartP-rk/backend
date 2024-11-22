@@ -15,9 +15,12 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // ->parameters(['fornecedores' =>])
-Route::apiResource('users', UserController::class);
-Route::apiResource('drivers', DriverController::class);
-Route::apiResource('parks', ParkController::class);
-Route::apiResource('vehicles', VehicleController::class);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('drivers', DriverController::class);
+    Route::apiResource('parks', ParkController::class);
+    Route::apiResource('vehicles', VehicleController::class);
+});
 
+Route::apiResource('users', UserController::class)->only('store');
 Route::post('login', [UserController::class, 'login']);
