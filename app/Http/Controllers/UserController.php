@@ -48,6 +48,14 @@ class UserController extends Controller
         return response()->json(['msg' => 'Email ou senha incorretos!'], 401);
     }
 
+    public function refreshToken(Request $request){
+        // Invalida o token antigo
+        $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
+        // Gera um novo token
+        $newToken = $request->user()->createToken('authToken')->plainTextToken;
+        return response()->json(['msg' => 'Token renovado com sucesso', 'token' => $newToken], 200);
+    }
+
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json(['msg' => 'Usuário deslogado com sucesso'], 200);
