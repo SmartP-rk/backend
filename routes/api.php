@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('parks', ParkController::class);
     Route::apiResource('vehicles', VehicleController::class);
     Route::post('logout', [UserController::class, 'logout']);
+    Route::post('destruct-all-tokens', [UserController::class, 'destructAllTokens']);
 });
 
 Route::apiResource('users', UserController::class)->only('store');

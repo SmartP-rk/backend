@@ -52,4 +52,9 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
         return response()->json(['msg' => 'Usuário deslogado com sucesso'], 200);
     }
+
+    public function destructAllTokens(Request $request){
+        $request->user()->tokens()->delete();
+        return response()->json(['msg' => 'Tokens destruídos com sucesso'], 200);
+    }
 }
