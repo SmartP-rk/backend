@@ -47,4 +47,9 @@ class UserController extends Controller
         }
         return response()->json(['msg' => 'Email ou senha incorretos!'], 401);
     }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['msg' => 'Usuário deslogado com sucesso'], 200);
+    }
 }
