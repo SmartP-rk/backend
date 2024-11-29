@@ -14,7 +14,7 @@ class DriverController extends Controller
     }
     public function index()
     {
-        $drivers = $this->driver->all();
+        $drivers = $this->driver->with('vehicles')->get();
         if($drivers->isEmpty()){
             return response()->json(['error' => 'Não há motoristas cadastrados'], 404);
         }
