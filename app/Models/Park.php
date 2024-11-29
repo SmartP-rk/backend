@@ -23,24 +23,6 @@ class Park extends Model
         'vacancy_count',
         'image'
     ];
-    public function rules(){
-        return
-        [
-            'proprietor' => 'required',
-            'cnpj' => 'required',
-            'name' => 'required',
-            'phone' => 'required',
-            'zcode' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'neighborhood' => 'required',
-            'street' => 'required',
-            'number' => 'required',
-            'complement' => 'nullable',
-            'vacancy_count' => 'required',
-            'image' => 'nullable'
-        ];
-    }
 
     public function proprietor(){
         return $this->belongsTo(User::class, 'proprietor');
