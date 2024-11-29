@@ -18,7 +18,7 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $vehicles = $this->vehicle->all();
+        $vehicles = $this->vehicle->with('drivers')->get();
         if($vehicles->isEmpty()){
             return response()->json(['error' => 'Não há veículos cadastrados'], 404);
         }
@@ -39,7 +39,7 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-        $vehicle = $this->vehicle->find($id);
+        $vehicle = $this->vehicle->with('drivers')->find($id);
         if($vehicle === null){
             return response()->json(['error' => 'Veículo não encontrado'], 404);
         }
