@@ -17,7 +17,9 @@ class DriverFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'cpf' => fake()->unique()->numerify('###.###.###-##'),
+            'phone' => fake()->phoneNumber()
         ];
     }
 }
