@@ -16,7 +16,7 @@ class ParkController extends Controller
     }
     public function index()
     {
-        $parks = $this->park->all();
+        $parks = $this->park->with('proprietor')->get();
         if($parks->isEmpty()){
             return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
         }
@@ -37,7 +37,7 @@ class ParkController extends Controller
      */
     public function show($id)
     {
-        $park = $this->park->find($id);
+        $park = $this->park->with('proprietor')->find($id);
         if($park === null){
             return response()->json(['error' => 'Estacionamento não encontrado'], 404);
         }
