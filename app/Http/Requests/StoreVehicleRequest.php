@@ -23,7 +23,7 @@ class StoreVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'driver' => 'required|numeric',
+            'driver_id' => 'required|exists:drivers,id',
             'color' => 'required|max:255',
             'year' => 'required|max:4|regex:/^\d{4}$/',
             'mark' => 'required|max:255',
@@ -36,8 +36,8 @@ class StoreVehicleRequest extends FormRequest
 
     public function messages(){
         return [
-            'driver.required' => 'O campo motorista é obrigatório',
-            'driver.numeric' => 'O motorista deve ser o id',
+            'driver_id.required' => 'O campo motorista é obrigatório',
+            'driver_id.exists' => 'O motorista informado não existe',
             'color.required' => 'O campo cor é obrigatório',
             'color.max' => 'A cor deve ter no máximo 255 caracteres',
             'year.required' => 'O campo ano é obrigatório',

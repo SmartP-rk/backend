@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $fillable = [
-        'driver',
+        'driver_id',
         'color',
         'year',
         'mark',
@@ -15,4 +15,8 @@ class Vehicle extends Model
         'category',
         'plate'
     ];
+
+    public function drivers(){
+        return $this->belongsTo(Driver::class);
+    }
 }
