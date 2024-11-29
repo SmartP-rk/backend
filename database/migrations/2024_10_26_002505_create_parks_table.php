@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('parks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('proprietor');
+            $table->foreignId('proprietor')->constrained('users');
             $table->string('cnpj');
             $table->string('phone');
             $table->string('zcode');

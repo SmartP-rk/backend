@@ -13,4 +13,8 @@ class Driver extends Model
         'cpf',
         'phone'
     ];
+
+    public function vehicles(){
+        return $this->hasMany(Vehicle::class);
+    }
 }

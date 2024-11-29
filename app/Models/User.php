@@ -51,4 +51,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function park(){
+        return $this->hasOne(Park::class, 'proprietor');
+    }
 }

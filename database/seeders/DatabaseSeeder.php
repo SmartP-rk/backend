@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use App\Models\{
     User,
     Driver,
-    Vehicle
+    Vehicle,
+    Park
 };
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,7 +18,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(5)->create();
+        User::factory(5)
+            ->hasPark()
+            ->create();
         Driver::factory(10)->create();
         Vehicle::factory(10)->create();
     }
