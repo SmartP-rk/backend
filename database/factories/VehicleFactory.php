@@ -16,8 +16,31 @@ class VehicleFactory extends Factory
      */
     public function definition(): array
     {
+        // Arrays de opções para mark, model e category
+        $marks = ['Fiat', 'Chevrolet', 'Volkswagen', 'Toyota', 'Ford'];
+        $models = ['Uno', 'Onix', 'Gol', 'Corolla', 'Fiesta'];
+        $categories = ['Hatch', 'Sedan', 'SUV', 'Pickup', 'Coupe'];
+
         return [
-            //
+            'driver_id' => fake()->numberBetween(1, 8),
+            'color' => fake()->colorName(),
+            'year' => fake()->date(),
+            'mark' => fake()->randomElement($marks),
+            'model' => fake()->randomElement($models),
+            'category' => fake()->randomElement($categories),
+            'plate' => $this->generatePlate()
         ];
+    }
+
+    // Método para gerar placas de veículo
+    private function generatePlate(): string
+    {
+        // Probabilidade de gerar no formato Mercosul (AAA1A11)
+        $isMercosul = fake()->boolean(50);
+        if ($isMercosul) {
+            return strtoupper(fake()->regexify('[A-Z]{3}[0-9][A-Z][0-9]{2}'));
+        }
+        // Formato antigo (AAA-1234)
+        return strtoupper(fake()->regexify('[A-Z]{3}-[0-9]{4}'));
     }
 }
