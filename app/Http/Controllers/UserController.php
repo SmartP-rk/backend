@@ -22,7 +22,7 @@ class UserController extends Controller
     }
 
     public function show(User $user){
-        return response()->json(['user' => $user], 200);
+        return response()->json(['user' => $user->load('park')], 200);
     }
 
     public function update(UpdateUserRequest $request, User $user){
@@ -38,11 +38,13 @@ class UserController extends Controller
 
     public function login(LoginRequest $loginRequest){
         if(Auth::attempt($loginRequest->only('email', 'password'))){
+            $user = $loginRequest->user();
+            $user->load('park');
             //(Dentro dos parenteses vai o nome do token)
             $token = $loginRequest->user()->createToken($loginRequest->email)->plainTextToken;
             return response()->json([
                 'msg' => 'Usuário autenticado com sucesso',
-                'user' => $loginRequest->user(), 'token' => $token
+                'user' => $user, 'token' => $token
             ], 200);
         }
         return response()->json(['msg' => 'Email ou senha incorretos!'], 401);
