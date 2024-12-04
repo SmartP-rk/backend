@@ -59,6 +59,22 @@ class UserControllerTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['email']);
     }
 
+    public function test_email_is_valid(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'teste-email',
+            'password' => '!Password123',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
+        $response->assertStatus(422)->assertJsonValidationErrors(['email']);
+    }
+
     public function test_store_creates_user_and_returns_success_message()
     {
         // Dados simulados para criar o usuário
