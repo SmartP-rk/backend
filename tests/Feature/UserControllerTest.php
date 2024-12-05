@@ -75,6 +75,22 @@ class UserControllerTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['email']);
     }
 
+    public function teste_password_is_required(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => '',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
+        $response->assertStatus(422)->assertJsonValidationErrors(['password' => 'O campo senha é obrigatório']);
+    }
+
     public function test_password_must_have_at_least_8_characters(){
         // Dados simulados para criar o usuário
         $payload = [
