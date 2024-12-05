@@ -185,4 +185,36 @@ class UserStoreRequestTest extends TestCase
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
         $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'O campo CPF é obrigatório']);
     }
+
+    public function test_cpf_must_have_at_laest_11_characters(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => str_repeat('1', 10),
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
+        $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'O CPF deve ter no minímo 11 caracteres']);
+    }
+
+    public function test_cpf_must_have_maximum_14_characters(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => str_repeat('1', 15),
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
+        $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'O CPF deve ter no máximo 14 caracteres']);
+    }
 }
