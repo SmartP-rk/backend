@@ -106,12 +106,28 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['password']);
     }
 
-    public function test_password_must_have_at_least_one_number(){
+    public function test_password_must_have_at_least_one_uppercase_letter(){
         // Dados simulados para criar o usuário
         $payload = [
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
-            'password' => 'Password!',
+            'password' => 'password1!',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
+        $response->assertStatus(422)->assertJsonValidationErrors(['password' => 'A senha deve ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial']);
+    }
+
+    public function test_password_must_have_at_laest_one_lowercase_letter(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'PASSWORD1!',
             'cpf' => '000.000.000-00',
             'phone' => '(53) 99911-2233',
             'user_type' => '1',
