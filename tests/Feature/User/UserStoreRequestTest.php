@@ -186,7 +186,7 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'O campo CPF é obrigatório']);
     }
 
-    public function test_cpf_must_have_at_laest_11_characters(){
+    public function test_cpf_must_have_minimum_11_characters(){
         // Dados simulados para criar o usuário
         $payload = [
             'name' => 'John Doe',
