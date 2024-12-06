@@ -38,6 +38,7 @@ class StoreUserRequest extends FormRequest
             'name.max' => 'O nome deve ter 255 caracteres',
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'Insira um email válido',
+            'email.unique' => 'Já existe um usuário cadastrado com esse email',
             'password.required' => 'O campo senha é obrigatório',
             'password.min' => 'A senha deve ter no minímo 8 caracteres',
             'password.regex' => 'A senha deve ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial',
