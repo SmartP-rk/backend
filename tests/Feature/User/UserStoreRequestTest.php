@@ -4,6 +4,7 @@ namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Concerns\AssertsStatusCodes;
 use Tests\TestCase;
 use App\Models\User;
 
@@ -216,5 +217,25 @@ class UserStoreRequestTest extends TestCase
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
         $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'O CPF deve ter no máximo 14 caracteres']);
+    }
+
+    public function test_cpf_is_unique(){
+        // Inserindo um usuário com CPF especifico
+        User::factory()->create([
+            'cpf' => '000.000.000-00'
+        ]);
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
+        $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'Por favor insira um CPF válido']);
     }
 }
