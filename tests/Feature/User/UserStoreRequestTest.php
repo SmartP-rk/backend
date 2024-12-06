@@ -254,4 +254,20 @@ class UserStoreRequestTest extends TestCase
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
         $response->assertStatus(422)->assertJsonValidationErrors(['phone' => 'O campo telefone é obrigatório']);
     }
+
+    public function test_phone_must_have_minimum_11_characters(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => '000.000.000-00',
+            'phone' => str_repeat('1', 10),
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
+        $response->assertStatus(422)->assertJsonValidationErrors(['phone' => 'O telefone deve ter no minímo 11']);
+    }
 }
