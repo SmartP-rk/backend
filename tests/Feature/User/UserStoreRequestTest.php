@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Concerns\AssertsStatusCodes;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 
 class UserStoreRequestTest extends TestCase
 {
@@ -285,5 +286,24 @@ class UserStoreRequestTest extends TestCase
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
         $response->assertStatus(422)->assertJsonValidationErrors(['phone' => 'O telefone deve ter no máximo 15']);
+    }
+
+    public function test_image_validation_rejects_invalid_extension(){
+        // Crie um arquivo com uma extensão inválida
+        $file = UploadedFile::fake()->create('document.pdf', 100);
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'image' => $file,
+            'user_type' => '1',
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
+        $response->assertStatus(422)->assertJsonValidationErrors(['image' => 'A imagem deve ser nas extensões png, jpeg, jpg']);
     }
 }
