@@ -338,4 +338,20 @@ class UserStoreRequestTest extends TestCase
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
         $response->assertStatus(422)->assertJsonValidationErrors(['user_type' => 'O tipo de usuário deve ser um número']);
     }
+
+    public function test_user_type_must_be_bigger_zero(){
+        // Dados simulados para criar o usuário
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password1!',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => -1,
+        ];
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
+        $response->assertStatus(422)->assertJsonValidationErrors(['user_type' => 'O tipo de usuário deve ser entre 0 e 3']);
+    }
 }
