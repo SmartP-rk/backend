@@ -51,12 +51,8 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
         $driver->delete();
         return response()->json(['msg' => 'Motorista excluído com sucesso'], 200);
     }
