@@ -16,8 +16,19 @@ class UserController extends Controller
     }
 
     public function store(StoreUserRequest $request){
-        $user = $this->user->create($request->all());
-        return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
+        try {
+            $user = $this->user->create($request->validated());
+            if($request->hasFile('image')){
+                $path = $request->file('image')->store('images/users', 'public');
+                $user->image = $path;
+                $user->save();
+            }
+            return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
+        }
+        catch(\Exception $exception) {
+            info('Exception in store method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     public function show(User $user){
