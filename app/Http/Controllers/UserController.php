@@ -110,8 +110,14 @@ class UserController extends Controller
     }
 
     public function logout(Request $request){
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['msg' => 'Usuário deslogado com sucesso'], 200);
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json(['msg' => 'Usuário deslogado com sucesso'], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in logout method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
     }
 
     public function destructAllTokens(Request $request){
