@@ -41,15 +41,11 @@ class DriverController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDriverRequest $request, $id)
+    public function update(UpdateDriverRequest $request, Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
-        $driver->fill($request->all());
+        $driver->fill($request->validated());
         $driver->save();
-        return response()->json(['msg' => 'Motorista atualizado com sucesso', 'driver' => $driver], 200);
+        return response()->json(['msg' => 'Motorista atualizado com sucesso', 'driver' => $driver->load('vehicles')], 200);
     }
 
     /**
