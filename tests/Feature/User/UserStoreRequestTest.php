@@ -12,16 +12,26 @@ use Illuminate\Http\UploadedFile;
 class UserStoreRequestTest extends TestCase
 {
     use RefreshDatabase;
-    public function test_name_is_required(){
-        // Dados simulados para criar o usuário
-        $payload = [
-            'name' => '',
+
+    protected $basePayload;
+
+    protected function setUp(): void{
+        parent::setUp();
+        $this->basePayload = [
+            'name' => 'John Doe',
             'email' => 'johndoe@example.com',
             'password' => '!Password123',
             'cpf' => '000.000.000-00',
             'phone' => '(53) 99911-2233',
             'user_type' => '1',
+            'image' => null,
         ];
+    }
+
+    public function test_name_is_required(){
+        // Dados simulados para criar o usuário
+        $payload = $this->basePayload;
+        $payload['name'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica a estrutura e conteúdo da resposta
@@ -30,14 +40,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_name_must_not_excced_255_characters(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => str_repeat('a', 256), // Cria uma string com 256 caracteres
-            'email' => 'johndoe@example.com',
-            'password' => '!Password123',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['name'] = str_repeat('a', 256); // Cria uma string com 256 caracteres
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para name
@@ -46,14 +50,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_email_is_required(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => '',
-            'password' => '!Password123',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['email'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
@@ -62,14 +60,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_email_is_valid(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'teste-email',
-            'password' => '!Password123',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['email'] = 'teste-email';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
@@ -82,14 +74,7 @@ class UserStoreRequestTest extends TestCase
             'email' => 'johndoe@example.com'
         ]);
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
@@ -98,14 +83,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_is_required(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => '',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -114,14 +93,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_must_have_at_least_8_characters(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => str_repeat('a', 7),
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = str_repeat('a', 7);
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -130,14 +103,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_must_have_at_least_one_uppercase_letter(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = 'password1!';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -146,14 +113,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_must_have_at_laest_one_lowercase_letter(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'PASSWORD1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = 'PASSWORD1!';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -162,14 +123,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_must_have_at_least_one_number(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = 'Password!';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -178,14 +133,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_password_must_have_at_laest_one_special_character(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['password'] = 'Password1';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para password
@@ -194,14 +143,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_cpf_is_required(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['cpf'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
@@ -210,14 +153,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_cpf_must_have_minimum_11_characters(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => str_repeat('1', 10),
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['cpf'] = str_repeat('1', 10);
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
@@ -226,14 +163,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_cpf_must_have_maximum_14_characters(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => str_repeat('1', 15),
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['cpf'] = str_repeat('1', 15);
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
@@ -246,14 +177,8 @@ class UserStoreRequestTest extends TestCase
             'cpf' => '000.000.000-00'
         ]);
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['cpf'] = '000.000.000-00';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para cpf
@@ -262,14 +187,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_phone_is_required(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '',
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['phone'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
@@ -278,14 +197,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_phone_must_have_minimum_11_characters(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => str_repeat('1', 10),
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['phone'] = str_repeat('1', 10);
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
@@ -294,14 +207,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_phone_must_have_maximum_15_characteres(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => str_repeat('1', 16),
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['phone'] = str_repeat('1', 16);
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para phone
@@ -312,15 +219,8 @@ class UserStoreRequestTest extends TestCase
         // Crie um arquivo com uma extensão inválida
         $file = UploadedFile::fake()->create('document.pdf', 100);
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'image' => $file,
-            'user_type' => '1',
-        ];
+        $payload = $this->basePayload;
+        $payload['image'] = $file;
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
@@ -329,14 +229,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_user_type_is_required(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => '',
-        ];
+        $payload = $this->basePayload;
+        $payload['user_type'] = '';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
@@ -345,14 +239,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_user_type_is_numeric(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => 'a',
-        ];
+        $payload = $this->basePayload;
+        $payload['user_type'] = 'a';
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
@@ -361,14 +249,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_user_type_must_be_bigger_zero(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => -1,
-        ];
+        $payload = $this->basePayload;
+        $payload['user_type'] = -1;
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
@@ -377,14 +259,8 @@ class UserStoreRequestTest extends TestCase
 
     public function test_user_type_must_be_minor_four(){
         // Dados simulados para criar o usuário
-        $payload = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'password' => 'Password1!',
-            'cpf' => '000.000.000-00',
-            'phone' => '(53) 99911-2233',
-            'user_type' => 4,
-        ];
+        $payload = $this->basePayload;
+        $payload['user_type'] = 4;
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para image
