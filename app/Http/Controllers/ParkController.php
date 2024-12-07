@@ -35,13 +35,9 @@ class ParkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Park $park)
     {
-        $park = $this->park->with('proprietor')->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
-        return response()->json(['park' => $park], 200);
+        return response()->json(['park' => $park->with('proprietor')], 200);
     }
 
     /**
