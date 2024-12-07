@@ -56,8 +56,17 @@ class UserController extends Controller
     }
 
     public function destroy(User $user){
-        $user->delete();
-        return response()->json(['msg' => 'Usuário excluído com sucesso'], 200);
+        try {
+            if($user->image != null){
+                Storage::disk('local')->delete($user->image);
+            }
+            $user->delete();
+            return response()->json(['msg' => 'Usuário excluído com sucesso'], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in destroy method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
     }
 
     public function login(LoginRequest $loginRequest){
