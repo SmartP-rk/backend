@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserControllerTest extends TestCase
 {
@@ -56,5 +57,27 @@ class UserControllerTest extends TestCase
         // Valida que a senha foi armazenada como hash
         $user = User::where('email', 'johndoe@example.com')->first();
         $this->assertTrue(Hash::check('!Password123', $user->password));
+    }
+
+    public function test_store_creates_user_with_image()
+    {
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('perfil-image.png');
+        $payload = [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'Password123!',
+            'cpf' => '000.000.000-00',
+            'phone' => '(53) 99911-2233',
+            'user_type' => '1',
+            'image' => $file,
+        ];
+
+        $response = $this->postJson(route('users.store'), $payload);
+
+        $response->assertStatus(201)
+            ->assertJsonStructure(['msg', 'user']);
+        $this->assertDatabaseHas('users', ['email' => 'johndoe@example.com']);
+        $this->assertFileExists(Storage::disk('public')->path('images/users/' . $file->hashName()));
     }
 }
