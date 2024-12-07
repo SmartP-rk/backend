@@ -33,7 +33,13 @@ class UserController extends Controller
     }
 
     public function show(User $user){
-        return response()->json(['user' => $user->load('park')], 200);
+        try {
+            return response()->json(['user' => $user->load('park')], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in show method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     public function update(UpdateUserRequest $request, User $user){
