@@ -37,13 +37,9 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->with('drivers')->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
-        return response()->json(['vehicle' => $vehicle], 200);
+        return response()->json(['vehicle' => $vehicle->load('drivers')], 200);
     }
 
     /**
