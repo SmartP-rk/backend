@@ -37,7 +37,7 @@ class ParkController extends Controller
      */
     public function show(Park $park)
     {
-        return response()->json(['park' => $park->with('proprietor')], 200);
+        return response()->json(['park' => $park->load('proprietor')], 200);
     }
 
     /**
@@ -45,12 +45,9 @@ class ParkController extends Controller
      */
     public function update(UpdateParkRequest $request, Park $park)
     {
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
         $park->fill($request->all());
         $park->save();
-        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park], 200);
+        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
     }
 
     /**
