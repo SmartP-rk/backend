@@ -53,12 +53,8 @@ class ParkController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Park $park)
     {
-        $park = $this->park->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
         $park->delete();
         return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
     }
