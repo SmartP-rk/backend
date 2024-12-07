@@ -96,11 +96,17 @@ class UserController extends Controller
     }
 
     public function refreshToken(Request $request){
-        // Invalida o token antigo
-        $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
-        // Gera um novo token
-        $newToken = $request->user()->createToken('authToken')->plainTextToken;
-        return response()->json(['msg' => 'Token renovado com sucesso', 'token' => $newToken], 200);
+        try {
+            // Invalida o token antigo
+            $request->user()->tokens()->where('id', $request->user()->currentAccessToken()->id)->delete();
+            // Gera um novo token
+            $newToken = $request->user()->createToken('authToken')->plainTextToken;
+            return response()->json(['msg' => 'Token renovado com sucesso', 'token' => $newToken], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in refreshToken method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
     }
 
     public function logout(Request $request){
