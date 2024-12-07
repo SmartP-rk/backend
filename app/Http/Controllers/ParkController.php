@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Park;
-use App\Http\Requests\StoreParkRequest;
-use App\Http\Requests\UpdateParkRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use App\Http\Requests\Park\{StoreParkRequest, UpdateParkRequest};
 
 class ParkController extends Controller
 {
