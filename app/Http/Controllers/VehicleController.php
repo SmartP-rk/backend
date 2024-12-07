@@ -55,12 +55,8 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
         $vehicle->delete();
         return response()->json(['msg' => 'Veículo excluído com sucesso'], 200);
     }
