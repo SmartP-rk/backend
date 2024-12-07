@@ -26,4 +26,4 @@ Route::middleware('auth:sanctum')->group(function(){
 });
 
 Route::apiResource('users', UserController::class)->only('store');
-Route::post('login', [UserController::class, 'login']);
+Route::post('login', [UserController::class, 'login'])->name('user.login');

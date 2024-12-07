@@ -5,6 +5,7 @@ namespace Tests\Feature\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 
 class UserControllerTest extends TestCase
@@ -47,5 +48,29 @@ class UserControllerTest extends TestCase
         // Valida que a senha foi armazenada como hash
         $user = User::where('email', 'johndoe@example.com')->first();
         $this->assertTrue(Hash::check('!Password123', $user->password));
+    }
+
+    public function test_login_sucessful(){
+        $password = 'Password!1';
+        // Cria um usuário com uma senha conhecida
+        $user = User::factory()->create([
+            'password' => Hash::make($password),
+        ]);
+        // Tenta fazer o login com um usuário válido
+        $response = $this->postJson(route('user.login'),
+        [
+            'email' => $user->email,
+            'password' => $password,
+        ]);
+        // Verifica o status da resposta e a estrutura
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'msg',
+                'user' => ['id', 'name', 'email', 'cpf', 'phone', 'user_type', 'created_at', 'updated_at'],
+                'token',
+            ])
+            ->assertJson([
+                'msg' => 'Usuário autenticado com sucesso',
+            ]);
     }
 }
