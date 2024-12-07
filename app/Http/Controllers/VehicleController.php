@@ -45,13 +45,9 @@ class VehicleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVehicleRequest $request, $id)
+    public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
-        $vehicle->fill($request->all());
+        $vehicle->fill($request->validated());
         $vehicle->save();
         return response()->json(['msg' => 'Veículo atualizado com sucesso', 'vehicle' => $vehicle], 200);
     }
