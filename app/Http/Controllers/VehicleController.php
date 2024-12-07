@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreVehicleRequest;
-use App\Http\Requests\UpdateVehicleRequest;
+use App\Http\Requests\Vehicle\{StoreVehicleRequest, UpdateVehicleRequest};
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
