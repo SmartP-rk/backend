@@ -121,7 +121,13 @@ class UserController extends Controller
     }
 
     public function destructAllTokens(Request $request){
-        $request->user()->tokens()->delete();
-        return response()->json(['msg' => 'Tokens destruídos com sucesso'], 200);
+        try {
+            $request->user()->tokens()->delete();
+            return response()->json(['msg' => 'Tokens destruídos com sucesso'], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in destructAllTokens method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
     }
 }
