@@ -33,13 +33,9 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
-        return response()->json(['driver' => $driver], 200);
+        return response()->json(['driver' => $driver->load('vehicles')], 200);
     }
 
     /**
