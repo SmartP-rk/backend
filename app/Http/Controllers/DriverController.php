@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
-use App\Http\Requests\StoreDriverRequest;
-use App\Http\Requests\UpdateDriverRequest;
+use App\Http\Requests\Driver\{StoreDriverRequest, UpdateDriverRequest};
 
 class DriverController extends Controller
 {
