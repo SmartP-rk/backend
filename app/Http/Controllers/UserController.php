@@ -7,6 +7,7 @@ use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -36,9 +37,22 @@ class UserController extends Controller
     }
 
     public function update(UpdateUserRequest $request, User $user){
-        $user->fill($request->all());
-        $user->save();
-        return response()->json(['msg' => 'Usuário atualizado com sucesso', 'user' => $user], 200);
+        try {
+            $user->fill($request->validated());
+            $user->save();
+            if($request->hasFile('image')){
+                if($user->image != null){
+                    Storage::disk('local')->delete($user->image);
+                }
+                $user->image = $request->file('image')->store('images/users', 'public');
+                $user->save();
+            }
+            return response()->json(['msg' => 'Usuário atualizado com sucesso', 'user' => $user], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in update method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
     }
 
     public function destroy(User $user){
