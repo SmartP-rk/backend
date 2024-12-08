@@ -210,15 +210,12 @@ class UserControllerTest extends TestCase
             ->assertJson(['error' => 'Registro não encontrado']);
     }
 
-    public function test_update_user_with_new_image()
+    public function test_update_user_with_new_image_when_no_image_exists()
     {
         // Cria um usuário sem imagem
-        $user = User::factory()->create();
+        $user = User::factory()->create(['image' => null]);
         // Autentica o usuário criado
-        Sanctum::actingAs(
-            $user,
-            ['*']
-        );
+        Sanctum::actingAs($user);
         // Cria uma imagem
         Storage::fake('public');
         $file = UploadedFile::fake()->image('new-image.png');
