@@ -186,6 +186,16 @@ class UserControllerTest extends TestCase
             ->assertJsonStructure(['user']);
     }
 
+    public function test_show_requires_authentication()
+    {
+        // Cria um usuário
+        $user = User::factory()->create();
+        // Faz uma requisição para a rota show sem autenticação
+        $response = $this->getJson(route('users.show', $user->id));
+        // Verifica se a resposta é 401 (Unauthorized)
+        $response->assertStatus(401);
+    }
+
     public function test_update_user_with_new_image()
     {
         // Cria um usuário sem imagem
