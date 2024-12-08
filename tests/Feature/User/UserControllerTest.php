@@ -123,4 +123,61 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure(['user']);
     }
+
+    public function test_update_user_with_new_image()
+    {
+        // Cria um usuário sem imagem
+        $user = User::factory()->create();
+        // Autentica o usuário criado
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        // Cria uma imagem
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('new-image.png');
+        // Dados simulados para atualização
+        $payload = [
+            'name' => 'Updated Name',
+            'image' => $file,
+        ];
+        // Chama a rota do método update passando o id do usuário criado acima e os dados para atualização
+        $response = $this->putJson(route('users.update', $user->id), $payload);
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJsonStructure(['msg', 'user'])
+            ->assertJson(['msg' => 'Usuário atualizado com sucesso']);
+        // Verifica se o usuário realmente foi atualizado no banco de dados
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
+        // Verifca se a imagem foi salva no Storage
+        $this->assertFileExists(Storage::disk('public')->path('images/users/' . $file->hashName()));
+    }
+
+    // public function test_update_user_without_image()
+    // {
+    //     $user = User::factory()->create();
+
+    //     $payload = [
+    //         'name' => 'Updated Name',
+    //     ];
+
+    //     $response = $this->putJson(route('users.update', $user->id), $payload);
+
+    //     $response->assertStatus(200)
+    //         ->assertJsonStructure(['msg', 'user']);
+    //     $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
+    // }
+
+    // public function test_update_fails_with_invalid_data()
+    // {
+    //     $user = User::factory()->create();
+
+    //     $payload = [
+    //         'email' => 'invalid-email', // Supondo que essa validação falhe
+    //     ];
+
+    //     $response = $this->putJson(route('users.update', $user->id), $payload);
+
+    //     $response->assertStatus(422);
+    // }
 }
