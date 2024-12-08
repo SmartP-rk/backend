@@ -146,6 +146,18 @@ class UserControllerTest extends TestCase
             ->assertJson(['msg' => 'Token renovado com sucesso']);
     }
 
+    public function test_logout_successfully()
+    {
+        // Cria e autentica o usuário criado
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        // Faz uma requisição para a rota de logout
+        $response = $this->postJson(route('user.logout'));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJson(['msg' => 'Usuário deslogado com sucesso']);
+    }
+
     public function test_show_user_successfully()
     {
         // Cria um usuário
