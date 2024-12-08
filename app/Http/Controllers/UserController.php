@@ -64,7 +64,7 @@ class UserController extends Controller
     public function destroy(User $user){
         try {
             if($user->image != null){
-                Storage::disk('local')->delete($user->image);
+                Storage::disk('public')->delete($user->image);
             }
             $user->delete();
             return response()->json(['msg' => 'Usuário excluído com sucesso'], 200);

@@ -175,4 +175,28 @@ class UserControllerTest extends TestCase
         // Verifica se o usuário realmente foi atualizado no banco de dados
         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
     }
+    public function test_destroy_user_successfully()
+    {
+        // Cria um usuário sem imagem
+        $user = User::factory()->create();
+        // Cria e insere no usuário uma iumagem
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('image.png');
+        $user->image = $file->store('images/users', 'public');
+        $user->save();
+        // Autentica o usuário criado
+        Sanctum::actingAs(
+            $user,
+            ['*']
+        );
+        // Chama a rota do método destroy passando o id do usuário criado acima
+        $response = $this->deleteJson(route('users.destroy', $user->id));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJson(['msg' => 'Usuário excluído com sucesso']);
+        // Verifica se o usuário realmente foi deletado do banco de dados
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        // Verifica se a imagem do usuário foi excluída
+        $this->assertFileDoesNotExist(Storage::disk('public')->path('images/users/' . $file->hashName()));
+    }
 }
