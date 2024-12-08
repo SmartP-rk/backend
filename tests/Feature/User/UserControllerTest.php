@@ -7,9 +7,9 @@ use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 class UserControllerTest extends TestCase
 {
@@ -106,5 +106,21 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'msg' => 'Usuário autenticado com sucesso',
             ]);
+    }
+
+    public function test_show_user_successfully()
+    {
+        // Cria um usuário
+        $user = User::factory()->create();
+        // Cria e autentica outra usuário
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+        // Chama a rota do método show passando o id do usuário criado acima
+        $response = $this->getJson(route('users.show', $user->id));
+        // Verifica o status da resposta e a estrutura
+        $response->assertStatus(200)
+            ->assertJsonStructure(['user']);
     }
 }
