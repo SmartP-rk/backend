@@ -158,6 +158,18 @@ class UserControllerTest extends TestCase
             ->assertJson(['msg' => 'Usuário deslogado com sucesso']);
     }
 
+    public function test_destruct_all_tokens_successfully()
+    {
+        // Cria e autentica o usuário criado
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        // Faz uma requisição para a rota de destruct all tokens
+        $response = $this->postJson(route('user.destructAllTokens'));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJson(['msg' => 'Tokens destruídos com sucesso']);
+    }
+
     public function test_show_user_successfully()
     {
         // Cria um usuário
