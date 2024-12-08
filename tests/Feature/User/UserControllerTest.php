@@ -337,4 +337,14 @@ class UserControllerTest extends TestCase
         // Verifica se a imagem do usuário foi excluída
         $this->assertFileDoesNotExist(Storage::disk('public')->path('images/users/' . $file->hashName()));
     }
+
+    public function test_destroy_requires_authentication()
+    {
+        // Cria um usuário
+        $user = User::factory()->create();
+        // Faz uma requisição para a rota show sem autenticação
+        $response = $this->getJson(route('users.destroy', $user->id));
+        // Verifica se a resposta é 401 (Unauthorized)
+        $response->assertStatus(401);
+    }
 }
