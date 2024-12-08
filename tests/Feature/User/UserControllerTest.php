@@ -288,6 +288,17 @@ class UserControllerTest extends TestCase
         // Verifica se o usuário realmente foi atualizado no banco de dados
         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
     }
+
+    public function test_update_requires_authentication()
+    {
+        // Cria um usuário
+        $user = User::factory()->create();
+        // Faz uma requisição para a rota show sem autenticação
+        $response = $this->getJson(route('users.update', $user->id));
+        // Verifica se a resposta é 401 (Unauthorized)
+        $response->assertStatus(401);
+    }
+
     public function test_destroy_user_successfully()
     {
         // Cria um usuário sem imagem
