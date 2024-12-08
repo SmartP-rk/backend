@@ -196,6 +196,20 @@ class UserControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
+    public function test_show_user_not_found()
+    {
+        // Cria um usuário
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+        // Faz uma requisição para a rota show com um ID de um usuário que não existe
+        $response = $this->getJson(route('users.show', '200'));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(404)
+            ->assertJson(['error' => 'Registro não encontrado']);
+    }
+
     public function test_update_user_with_new_image()
     {
         // Cria um usuário sem imagem
