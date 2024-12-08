@@ -294,7 +294,7 @@ class UserControllerTest extends TestCase
         // Cria um usuário
         $user = User::factory()->create();
         // Faz uma requisição para a rota show sem autenticação
-        $response = $this->getJson(route('users.update', $user->id));
+        $response = $this->putJson(route('users.update', $user->id));
         // Verifica se a resposta é 401 (Unauthorized)
         $response->assertStatus(401);
     }
@@ -307,7 +307,7 @@ class UserControllerTest extends TestCase
             ['*']
         );
         // Faz uma requisição para a rota show com um ID de um usuário que não existe
-        $response = $this->getJson(route('users.update', '200'));
+        $response = $this->putJson(route('users.update', '200'));
         // Verifica o status e a estrutura da resposta
         $response->assertStatus(404)
             ->assertJson(['error' => 'Registro não encontrado']);
@@ -343,8 +343,22 @@ class UserControllerTest extends TestCase
         // Cria um usuário
         $user = User::factory()->create();
         // Faz uma requisição para a rota show sem autenticação
-        $response = $this->getJson(route('users.destroy', $user->id));
+        $response = $this->deleteJson(route('users.destroy', $user->id));
         // Verifica se a resposta é 401 (Unauthorized)
         $response->assertStatus(401);
+    }
+
+    public function test_destroy_user_not_found()
+    {
+        // Cria um usuário
+        Sanctum::actingAs(
+            User::factory()->create(),
+            ['*']
+        );
+        // Faz uma requisição para a rota show com um ID de um usuário que não existe
+        $response = $this->deleteJson(route('users.destroy', '200'));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(404)
+            ->assertJson(['error' => 'Registro não encontrado']);
     }
 }
