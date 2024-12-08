@@ -236,6 +236,36 @@ class UserControllerTest extends TestCase
         $this->assertFileExists(Storage::disk('public')->path('images/users/' . $file->hashName()));
     }
 
+    public function test_update_user_with_new_image_when_image_already_exists()
+    {
+        // Cria uma imagem inicial
+        $existingFile = UploadedFile::fake()->image('existing-image.png');
+        $existingPath = $existingFile->store('images/users', 'public');
+        // Cria um usuário com uma imagem existente
+        Storage::fake('public');
+        $user = User::factory()->create(['image' => $existingPath]);
+        // Autentica o usuário criado
+        Sanctum::actingAs($user, ['*']);
+        // Cria uma nova imagem para atualização
+        $newFile = UploadedFile::fake()->image('new-image.png');
+        // Dados simulados para atualização
+        $payload = [
+            'name' => 'Updated Name',
+            'image' => $newFile,
+        ];
+        // Chama a rota do método update
+        $response = $this->putJson(route('users.update', $user->id), $payload);
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJsonStructure(['msg', 'user'])
+            ->assertJson(['msg' => 'Usuário atualizado com sucesso']);
+        // Verifica se o usuário foi atualizado no banco
+        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
+        // Verifica se a nova imagem foi salva no Storage e a antiga foi removida
+        $this->assertFileExists(Storage::disk('public')->path('images/users/' . $newFile->hashName()));
+        $this->assertFileDoesNotExist(Storage::disk('public')->path($existingPath));
+    }
+
     public function test_update_user_without_image()
     {
         // Cria um usuário sem imagem
