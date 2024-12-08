@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('drivers', DriverController::class);
     Route::apiResource('parks', ParkController::class);
     Route::apiResource('vehicles', VehicleController::class);
-    Route::post('refresh-token', [UserController::class, 'refreshToken']);
+    Route::post('refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');
     Route::post('logout', [UserController::class, 'logout']);
     Route::post('destruct-all-tokens', [UserController::class, 'destructAllTokens']);
 });

@@ -126,11 +126,24 @@ class UserControllerTest extends TestCase
         $password = 'correct-password';
         $email = 'teste@gmail.com';
         $user = User::factory()->create(['password' => Hash::make($password), 'email' => $email]);
-        // Tentar fazer o login com uma senha inválida
+        // Tentar fazer o login com um email inválido
         $response = $this->postJson(route('user.login'), ['email' => 'wrong@gmail.com', 'password' => 'correct-password']);
         // Verifica o status e a estrutura da resposta
         $response->assertStatus(401)
             ->assertJson(['msg' => 'Email ou senha incorretos!']);
+    }
+
+    public function test_refresh_token_successfully()
+    {
+        // Cria e autentica o usuário criado
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        // Chama a rota de refresh-token
+        $response = $this->postJson(route('user.refreshToken'));
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(200)
+            ->assertJsonStructure(['msg', 'token'])
+            ->assertJson(['msg' => 'Token renovado com sucesso']);
     }
 
     public function test_show_user_successfully()
