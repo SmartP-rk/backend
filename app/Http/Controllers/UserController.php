@@ -48,7 +48,7 @@ class UserController extends Controller
             $user->save();
             if($request->hasFile('image')){
                 if($user->image != null){
-                    Storage::disk('local')->delete($user->image);
+                    Storage::disk('public')->delete($user->image);
                 }
                 $user->image = $request->file('image')->store('images/users', 'public');
                 $user->save();

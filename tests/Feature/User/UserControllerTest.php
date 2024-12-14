@@ -21,7 +21,8 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
         $this->basePayload = [
-            'name' => 'John Doe',
+            'name' => 'John',
+            'surname' => 'Doe',
             'email' => 'johndoe@example.com',
             'password' => '!Password123',
             'cpf' => '000.000.000-00',
@@ -46,7 +47,8 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'msg' => 'Usuário cadastrado com sucesso',
                 'user' => [
-                    'name' => 'John Doe',
+                    'name' => 'John',
+                    'surname' => 'Doe',
                     'email' => 'johndoe@example.com',
                     'cpf' => '000.000.000-00',
                     'phone' => '(53) 99911-2233',
