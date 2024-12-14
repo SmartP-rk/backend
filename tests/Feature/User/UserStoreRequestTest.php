@@ -76,6 +76,16 @@ class UserStoreRequestTest extends TestCase
             ->assertJsonStructure(['msg', 'user']);
     }
 
+    public function test_surname_is_required(){
+        // Dados simulados para criar o usuário
+        $payload = $this->basePayload;
+        $payload['surname'] = '';
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica a estrutura e conteúdo da resposta
+        $response->assertStatus(422)->assertJsonValidationErrors(['surname']);
+    }
+
     public function test_email_is_required(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
