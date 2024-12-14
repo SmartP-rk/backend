@@ -48,6 +48,24 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['name']);
     }
 
+    public function test_it_fails_validation_for_invalid_names()
+    {
+        $invalidNames = [
+            'John1 Doe',     // Contém número
+            'John_Doe',      // Contém underscore
+            'John-Doe',      // Contém hífen
+            'John@Doe',      // Contém símbolo especial
+            '123',           // Apenas números
+        ];
+        foreach ($invalidNames as $name) {
+            $payload = $this->basePayload;
+            $payload['name'] = $name;
+            $response = $this->postJson(route('users.store'), $payload);
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['name']);
+        }
+    }
+
     public function test_email_is_required(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
