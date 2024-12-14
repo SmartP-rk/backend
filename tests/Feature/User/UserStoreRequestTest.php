@@ -18,7 +18,8 @@ class UserStoreRequestTest extends TestCase
     protected function setUp(): void{
         parent::setUp();
         $this->basePayload = [
-            'name' => 'John Doe',
+            'name' => 'John',
+            'surname' => 'Doe',
             'email' => 'johndoe@example.com',
             'password' => '!Password123',
             'cpf' => '000.000.000-00',
@@ -64,6 +65,15 @@ class UserStoreRequestTest extends TestCase
             $response->assertStatus(422)
                 ->assertJsonValidationErrors(['name']);
         }
+    }
+
+    public function test_it_allow_name_with_letters_and_spaces_only()
+    {
+        $payload = $this->basePayload;
+        $payload['name'] = 'José da Silva';
+        $response = $this->postJson(route('users.store'), $payload);
+        $response->assertStatus(201)
+            ->assertJsonStructure(['msg', 'user']);
     }
 
     public function test_email_is_required(){
