@@ -38,10 +38,10 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['name']);
     }
 
-    public function test_name_must_not_excced_255_characters(){
+    public function test_name_must_not_excced_100_characters(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
-        $payload['name'] = str_repeat('a', 256); // Cria uma string com 256 caracteres
+        $payload['name'] = str_repeat('a', 101); // Cria uma string com 101 caracteres
         // Chama a rota users do método store com os dados
         $response = $this->postJson(route('users.store'), $payload);
         // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para name
