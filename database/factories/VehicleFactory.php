@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Driver;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +23,7 @@ class VehicleFactory extends Factory
         $categories = ['Hatch', 'Sedan', 'SUV', 'Pickup', 'Coupe'];
 
         return [
-            'driver_id' => fake()->numberBetween(1, 8),
+            'driver_id' => Driver::factory(),
             'color' => fake()->colorName(),
             'year' => fake()->date(),
             'mark' => fake()->randomElement($marks),
