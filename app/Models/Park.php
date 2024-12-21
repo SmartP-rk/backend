@@ -27,4 +27,8 @@ class Park extends Model
     public function proprietor(){
         return $this->belongsTo(User::class, 'proprietor');
     }
+
+    public function drivers(){
+        return $this->hasMany(Driver::class, 'park');
+    }
 }

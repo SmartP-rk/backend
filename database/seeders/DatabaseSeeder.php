@@ -19,9 +19,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(5)
-            ->hasPark()
+            ->has(
+                Park::factory()
+                    ->has(Driver::factory(10), 'drivers')
+            )
             ->create();
-        Driver::factory(10)->create();
-        Vehicle::factory(10)->create();
     }
 }
