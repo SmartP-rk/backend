@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('users', UserController::class);
     Route::apiResource('drivers', DriverController::class);
     Route::apiResource('parks', ParkController::class);
+    Route::get('park/{park}/drivers', [DriverController::class, 'indexByPark'])->name('park.drivers.index');
     Route::apiResource('vehicles', VehicleController::class);
     Route::post('refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');
     Route::post('logout', [UserController::class, 'logout'])->name('user.logout');

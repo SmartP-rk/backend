@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use App\Http\Requests\Driver\{StoreDriverRequest, UpdateDriverRequest};
+use App\Models\Park;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -18,6 +20,14 @@ class DriverController extends Controller
             return response()->json(['error' => 'Não há motoristas cadastrados'], 404);
         }
         return response()->json(['drivers' => $drivers], 200);
+    }
+
+    public function indexByPark(Park $park){
+        $drivers = $this->driver->where('park', '=', $park->id)->get();
+        if($drivers->isEmpty()){
+            return response()->json(['error' => 'Não há motoristas cadastrados'], 404);
+        }
+        return response()->json(['drivers' => $drivers->load('vehicles')], 200);
     }
 
     /**
