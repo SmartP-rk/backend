@@ -18,7 +18,7 @@ class Vehicle extends Model
         'plate'
     ];
 
-    public function drivers(){
+    public function driver(){
         return $this->belongsTo(Driver::class, 'driver_id');
     }
 }

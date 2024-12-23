@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Vehicle\{StoreVehicleRequest, UpdateVehicleRequest};
+use App\Models\Park;
 use App\Models\Vehicle;
+use App\Repository\VehicleRepository;
 
 class VehicleController extends Controller
 {
     protected $vehicle;
-    public function __construct(Vehicle $vehicle){
+    protected $vehicleRepository;
+    public function __construct(Vehicle $vehicle, VehicleRepository $vehicleRepository){
         $this->vehicle = $vehicle;
+        $this->vehicleRepository = $vehicleRepository;
     }
     /**
      * Display a listing of the resource.
@@ -17,6 +21,15 @@ class VehicleController extends Controller
     public function index()
     {
         $vehicles = $this->vehicle->with('drivers')->get();
+        if($vehicles->isEmpty()){
+            return response()->json(['error' => 'Não há veículos cadastrados'], 404);
+        }
+        return response()->json(['vehicles' => $vehicles], 200);
+    }
+
+    public function indexByPark(Park $park)
+    {
+        $vehicles = $this->vehicleRepository->FindByParkId($park->id);
         if($vehicles->isEmpty()){
             return response()->json(['error' => 'Não há veículos cadastrados'], 404);
         }
