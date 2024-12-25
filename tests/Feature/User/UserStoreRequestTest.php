@@ -233,6 +233,34 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['cpf' => 'Por favor insira um CPF válido']);
     }
 
+    public function test_cpf_is_valid(){
+        $invalidCpfs = [
+            '11111111111', // Contém somente números
+            '111.111.11111', // Falta -
+            '111.111111-11', // Falta . no fim
+            '111111.111-11', // Falta . no inicio
+            '111.11111111', // Falta . no fim e -
+            '111111.11111', // Falta . no inicio e -
+            '111111111-11', // Falta os 2 .
+            '111.111.111_11', // _ no lugar do -
+            '.111.111.111-11', // . no começo
+            'aaa.aaa.aaa-aa', // Letras no formato
+            'aaa.111.aaa-aa', // Letras com número no formato
+        ];
+        foreach ($invalidCpfs as $cpf) {
+            $payload = $this->basePayload;
+            $payload['cpf'] = $cpf;
+            $response = $this->postJson(route('users.store'), $payload);
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['cpf' => 'Insira um CPF válido. Ex: 000.000.000-00']);
+            $this->assertCount(
+                1,
+                $response->json('errors'),
+                'Existem erros de validação não esperados'
+            );
+        }
+    }
+
     public function test_phone_is_required(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
