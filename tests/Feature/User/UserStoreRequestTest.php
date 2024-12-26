@@ -123,6 +123,33 @@ class UserStoreRequestTest extends TestCase
         $response->assertStatus(422)->assertJsonValidationErrors(['surname']);
     }
 
+    public function test_surname_boundary_150_characters(){
+        // Dados simulados para criar o usuário
+        $payload = $this->basePayload;
+        $payload['surname'] = str_repeat('a', 150); // Cria uma string com 150 caracteres
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('users.store'), $payload);
+        // Verifica se o status da resposta é 201 (Created) e se a resposta uma msg e o usuário criado
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'msg',
+                'user' => ['id', 'name', 'email', 'cpf', 'phone', 'user_type', 'image']
+            ])
+            ->assertJson([
+                'msg' => 'Usuário cadastrado com sucesso',
+                'user' => [
+                    'id' => 1,
+                    'name' => 'John',
+                    'surname' => str_repeat('a', 150),
+                    'email' => 'johndoe@example.com',
+                    'cpf' => '000.000.000-00',
+                    'phone' => '(53) 99911-2233',
+                    'user_type' => '1',
+                    'image' => null,
+                ]
+            ]);
+    }
+
     public function test_email_is_required(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
