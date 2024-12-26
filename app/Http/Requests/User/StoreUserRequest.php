@@ -28,7 +28,6 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
             'cpf' => 'required|min:11|max:14|unique:users|regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
             'phone' => 'required|min:11|max:15',
-            'image' => 'nullable|extensions:png,jpeg,jpg',
             'user_type' => 'required|numeric|min:0|max:3'
         ];
     }
@@ -55,7 +54,6 @@ class StoreUserRequest extends FormRequest
             'phone.required' => 'O campo telefone é obrigatório',
             'phone.min' => 'O telefone deve ter no minímo 11',
             'phone.max' => 'O telefone deve ter no máximo 15',
-            'image.extensions' => 'A imagem deve ser nas extensões png, jpeg, jpg',
             'user_type.required' => 'O campo tipo de usuário é obrigatório',
             'user_type.numeric' => 'O tipo de usuário deve ser um número',
             'user_type.min' => 'O tipo de usuário deve ser entre 0 e 3',

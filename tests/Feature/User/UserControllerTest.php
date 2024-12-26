@@ -32,7 +32,7 @@ class UserControllerTest extends TestCase
         ];
     }
 
-    public function test_store_creates_user_without_image()
+    public function test_store_creates_user_successful()
     {
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
@@ -62,25 +62,6 @@ class UserControllerTest extends TestCase
         // Valida que a senha foi armazenada como hash
         $user = User::where('email', 'johndoe@example.com')->first();
         $this->assertTrue(Hash::check('!Password123', $user->password));
-    }
-
-    public function test_store_creates_user_with_image()
-    {
-        // Cria uma imagem fake
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('perfil-image.png');
-        // Dados simulados para criar o usuário
-        $payload = $this->basePayload;
-        $payload['image'] = $file;
-        // Chama a rota do método store com os dados
-        $response = $this->postJson(route('users.store'), $payload);
-        // Verifica a estrutura e conteúdo da resposta
-        $response->assertStatus(201)
-            ->assertJsonStructure(['msg', 'user']);
-        // Verifica se o usuário foi criado no banco de dados
-        $this->assertDatabaseHas('users', ['email' => 'johndoe@example.com']);
-        // Verifica se a imagem foi salva no storage
-        $this->assertFileExists(Storage::disk('public')->path('images/users/' . $file->hashName()));
     }
 
     public function test_login_sucessful()

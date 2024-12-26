@@ -19,11 +19,6 @@ class UserController extends Controller
     public function store(StoreUserRequest $request){
         try {
             $user = $this->user->create($request->validated());
-            if($request->hasFile('image')){
-                $path = $request->file('image')->store('images/users', 'public');
-                $user->image = $path;
-                $user->save();
-            }
             return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
         }
         catch(\Exception $exception) {
