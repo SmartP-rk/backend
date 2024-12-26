@@ -10,6 +10,7 @@
         </testsuite>
         <testsuite name="Feature">
             <file>tests/Feature/User/UserStoreRequestTest.php</file>
+            <file>tests/Feature/User/LoginRequestTest.php</file>
             <file>tests/Feature/User/UserControllerTest.php</file>
         </testsuite>
     </testsuites>
