@@ -13,11 +13,17 @@ class ParkController extends Controller
     }
     public function index()
     {
-        $parks = $this->park->with('proprietor')->get();
-        if($parks->isEmpty()){
-            return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
+        try {
+            $parks = $this->park->with('proprietor')->get();
+            if($parks->isEmpty()){
+                return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
+            }
+            return response()->json( ['parks' => $parks], 200);
         }
-        return response()->json( ['parks' => $parks], 200);
+        catch(\Exception $exception) {
+            info('Exception in index method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -25,8 +31,14 @@ class ParkController extends Controller
      */
     public function store(StoreParkRequest $request)
     {
-        $park = $this->park->create($request->all());
-        return response()->json(['msg' => 'Estacionamento criado com sucesso', 'park' => $park], 201);
+        try {
+            $park = $this->park->create($request->validated());
+            return response()->json(['msg' => 'Estacionamento criado com sucesso', 'park' => $park], 201);
+        }
+        catch(\Exception $exception) {
+            info('Exception in store method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -34,7 +46,13 @@ class ParkController extends Controller
      */
     public function show(Park $park)
     {
-        return response()->json(['park' => $park->load('proprietor')], 200);
+        try {
+            return response()->json(['park' => $park->load('proprietor')], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in show method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -42,9 +60,15 @@ class ParkController extends Controller
      */
     public function update(UpdateParkRequest $request, Park $park)
     {
-        $park->fill($request->all());
-        $park->save();
-        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
+        try {
+            $park->fill($request->validated());
+            $park->save();
+            return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in store update park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -52,7 +76,13 @@ class ParkController extends Controller
      */
     public function destroy(Park $park)
     {
-        $park->delete();
-        return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
+        try {
+            $park->delete();
+            return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
+        }
+        catch(\Exception $exception) {
+            info('Exception in delete method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 }
