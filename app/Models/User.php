@@ -21,6 +21,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
         'cpf',
@@ -50,5 +51,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function park(){
+        return $this->hasOne(Park::class, 'proprietor');
     }
 }

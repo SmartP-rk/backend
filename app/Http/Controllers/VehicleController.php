@@ -2,23 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreVehicleRequest;
-use App\Http\Requests\UpdateVehicleRequest;
+use App\Http\Requests\Vehicle\{StoreVehicleRequest, UpdateVehicleRequest};
+use App\Models\Park;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
+use App\Repository\VehicleRepository;
 
 class VehicleController extends Controller
 {
     protected $vehicle;
-    public function __construct(Vehicle $vehicle){
+    protected $vehicleRepository;
+    public function __construct(Vehicle $vehicle, VehicleRepository $vehicleRepository){
         $this->vehicle = $vehicle;
+        $this->vehicleRepository = $vehicleRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $vehicles = $this->vehicle->all();
+        $vehicles = $this->vehicle->with('drivers')->get();
+        if($vehicles->isEmpty()){
+            return response()->json(['error' => 'Não há veículos cadastrados'], 404);
+        }
+        return response()->json(['vehicles' => $vehicles], 200);
+    }
+
+    public function indexByPark(Park $park)
+    {
+        $vehicles = $this->vehicleRepository->FindByParkId($park->id);
         if($vehicles->isEmpty()){
             return response()->json(['error' => 'Não há veículos cadastrados'], 404);
         }
@@ -37,25 +48,17 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
-        return response()->json(['vehicle' => $vehicle], 200);
+        return response()->json(['vehicle' => $vehicle->load('drivers')], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateVehicleRequest $request, $id)
+    public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
-        $vehicle->fill($request->all());
+        $vehicle->fill($request->validated());
         $vehicle->save();
         return response()->json(['msg' => 'Veículo atualizado com sucesso', 'vehicle' => $vehicle], 200);
     }
@@ -63,12 +66,8 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Vehicle $vehicle)
     {
-        $vehicle = $this->vehicle->find($id);
-        if($vehicle === null){
-            return response()->json(['error' => 'Veículo não encontrado'], 404);
-        }
         $vehicle->delete();
         return response()->json(['msg' => 'Veículo excluído com sucesso'], 200);
     }

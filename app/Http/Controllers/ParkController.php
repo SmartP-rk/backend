@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Park;
-use App\Http\Requests\StoreParkRequest;
-use App\Http\Requests\UpdateParkRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use App\Http\Requests\Park\{StoreParkRequest, UpdateParkRequest};
 
 class ParkController extends Controller
 {
@@ -16,7 +13,7 @@ class ParkController extends Controller
     }
     public function index()
     {
-        $parks = $this->park->all();
+        $parks = $this->park->with('proprietor')->get();
         if($parks->isEmpty()){
             return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
         }
@@ -35,13 +32,9 @@ class ParkController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Park $park)
     {
-        $park = $this->park->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
-        return response()->json(['park' => $park], 200);
+        return response()->json(['park' => $park->load('proprietor')], 200);
     }
 
     /**
@@ -49,23 +42,16 @@ class ParkController extends Controller
      */
     public function update(UpdateParkRequest $request, Park $park)
     {
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
         $park->fill($request->all());
         $park->save();
-        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park], 200);
+        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Park $park)
     {
-        $park = $this->park->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
-        }
         $park->delete();
         return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
     }

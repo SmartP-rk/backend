@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Park;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +22,7 @@ class StoreParkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'proprietor' => 'required',
+            'proprietor' => 'required|exists:users,id',
             'cnpj' => 'required|max:18|unique:parks|regex:/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})\-(\d{2})$/',
             'name' => 'required|max:255',
             'phone' => 'required|max:14',
@@ -41,6 +41,7 @@ class StoreParkRequest extends FormRequest
     public function messages(){
         return [
             'proprietor.required' => 'O campo proprietário é obrigatório',
+            'proprietor.exists' => 'O proprietário informado não existe',
             'cnpj.required' => 'O campo CNPJ é obrigatório',
             'cnpj.unique' => 'Insira um CNPJ válido. Ex: 00.000.000/0000-00',
             'cnpj.regex' => 'Insira um CNPJ válido. Ex: 00.000.000/0000-00',

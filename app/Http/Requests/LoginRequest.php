@@ -22,18 +22,17 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required | email',
-            'password' => 'required | string | min:8'
+            'email' => 'required | email:rfc,dns',
+            'password' => 'required | string '
         ];
     }
 
     public function messages(){
         return [
-            'email.required' => 'O campo email é obritório',
+            'email.required' => 'O campo email é obrigatório',
             'email.email' => 'Por favor insira um email válido',
-            'password.required' => 'O campo senha é obritório',
+            'password.required' => 'O campo senha é obrigatório',
             'password.string' => 'A senha deve ser uma string',
-            'password.min' => 'A senha deve ter no mínimo 8 caracteres',
         ];
     }
 }

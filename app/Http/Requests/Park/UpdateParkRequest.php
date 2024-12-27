@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Park;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateVehicleRequest extends FormRequest
+class UpdateParkRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UpdateVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+
         ];
     }
 }
