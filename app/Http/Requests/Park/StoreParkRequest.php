@@ -34,7 +34,7 @@ class StoreParkRequest extends FormRequest
             'number' => 'required|max:255',
             'complement' => 'nullable|max:255',
             'vacancy_count' => 'required|numeric',
-            // 'image' => 'nullable|extensions:jpg,png,jpeg,svg,webp,pdf'
+            'image' => 'nullable|extensions:jpg,png,jpeg,svg,webp'
         ];
     }
 
