@@ -20,7 +20,7 @@ class UserStoreRequestTest extends TestCase
         $this->basePayload = [
             'name' => 'John',
             'surname' => 'Doe',
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
             'password' => '!Password123',
             'cpf' => '000.000.000-00',
             'phone' => '(53) 99911-2233',
@@ -66,7 +66,7 @@ class UserStoreRequestTest extends TestCase
                     'id' => 1,
                     'name' => str_repeat('a', 100),
                     'surname' => 'Doe',
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@gmail.com',
                     'cpf' => '000.000.000-00',
                     'phone' => '(53) 99911-2233',
                     'user_type' => '1',
@@ -139,7 +139,7 @@ class UserStoreRequestTest extends TestCase
                     'id' => 1,
                     'name' => 'John',
                     'surname' => str_repeat('a', 150),
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@gmail.com',
                     'cpf' => '000.000.000-00',
                     'phone' => '(53) 99911-2233',
                     'user_type' => '1',
@@ -158,6 +158,28 @@ class UserStoreRequestTest extends TestCase
     }
 
     public function test_email_is_valid(){
+        $invalidEmails = [
+            'teste@emailcom', // Sem dominio
+            'testeemail.com', // Sem @
+            'teste-email', //Sem dominio e sem @
+        ];
+        foreach($invalidEmails as $email){
+            // Dados simulados para realizar login
+            $payload = $this->basePayload;
+            $payload['email'] = $email;
+            // Chama a rota users do método login com os dados
+            $response = $this->postJson(route('user.login'), $payload);
+            // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['email' => 'Por favor insira um email válido']);
+            //Garante que não existem outros erros no JSON
+            $this->assertCount(
+                1,
+                $response->json('errors'),
+                'Existem erros de validação não esperados'
+            );
+        }
+
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
         $payload['email'] = 'teste-email';
@@ -170,7 +192,7 @@ class UserStoreRequestTest extends TestCase
     public function test_email_is_unique(){
         // Inserindo um usuário com email especifico
         User::factory()->create([
-            'email' => 'johndoe@example.com'
+            'email' => 'johndoe@gmail.com'
         ]);
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;

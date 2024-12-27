@@ -24,7 +24,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|max:100|regex:/^[\pL\s]+$/u',
             'surname' => 'required|max:150|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email:rfc,dns|unique:users',
             'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
             'cpf' => 'required|min:11|max:14|unique:users|regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
             'phone' => 'required|min:11|max:15',
