@@ -13,7 +13,7 @@ class LoginRequestTest extends TestCase
     protected function setUp(): void{
         parent::setUp();
         $this->basePayload = [
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
             'password' => '!Password123',
         ];
     }
@@ -26,7 +26,7 @@ class LoginRequestTest extends TestCase
         $response = $this->postJson(route('user.login'), $payload);
         // Verifica a estrutura e conteúdo da resposta
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email' => 'O campo email é obritório']);
+            ->assertJsonValidationErrors(['email' => 'O campo email é obrigatório']);
     }
 
     public function test_email_is_valid(){
@@ -50,5 +50,22 @@ class LoginRequestTest extends TestCase
                 'Existem erros de validação não esperados'
             );
         }
+    }
+
+    public function test_password_is_required(){
+        // Dados simulados para realizar login
+        $payload = $this->basePayload;
+        $payload['password'] = '';
+        // Chama a rota users do método store com os dados
+        $response = $this->postJson(route('user.login'), $payload);
+        // Verifica a estrutura e conteúdo da resposta
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['password' => 'O campo senha é obrigatório']);
+        //Garante que não existem outros erros no JSON
+        $this->assertCount(
+            1,
+            $response->json('errors'),
+            'Existem erros de validação não esperados'
+        );
     }
 }
