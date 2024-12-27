@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Vehicle\{StoreVehicleRequest, UpdateVehicleRequest};
 use App\Models\Park;
 use App\Models\Vehicle;
-use App\Repository\VehicleRepository;
+use App\Repositories\VehicleRepository;
 
 class VehicleController extends Controller
 {
