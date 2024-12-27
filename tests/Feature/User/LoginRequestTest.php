@@ -28,4 +28,27 @@ class LoginRequestTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['email' => 'O campo email é obritório']);
     }
+
+    public function test_email_is_valid(){
+        $invalidEmails = [
+            'teste@emailcom', // Sem dominio
+            'testeemail.com', // Sem @
+        ];
+        foreach($invalidEmails as $email){
+            // Dados simulados para realizar login
+            $payload = $this->basePayload;
+            $payload['email'] = $email;
+            // Chama a rota users do método login com os dados
+            $response = $this->postJson(route('user.login'), $payload);
+            // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para email
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['email' => 'Por favor insira um email válido']);
+            //Garante que não existem outros erros no JSON
+            $this->assertCount(
+                1,
+                $response->json('errors'),
+                'Existem erros de validação não esperados'
+            );
+        }
+    }
 }
