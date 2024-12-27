@@ -23,7 +23,7 @@ class UserControllerTest extends TestCase
         $this->basePayload = [
             'name' => 'John',
             'surname' => 'Doe',
-            'email' => 'johndoe@example.com',
+            'email' => 'johndoe@gmail.com',
             'password' => '!Password123',
             'cpf' => '000.000.000-00',
             'phone' => '(53) 99911-2233',
@@ -49,7 +49,7 @@ class UserControllerTest extends TestCase
                 'user' => [
                     'name' => 'John',
                     'surname' => 'Doe',
-                    'email' => 'johndoe@example.com',
+                    'email' => 'johndoe@gmail.com',
                     'cpf' => '000.000.000-00',
                     'phone' => '(53) 99911-2233',
                     'user_type' => '1',
@@ -57,10 +57,10 @@ class UserControllerTest extends TestCase
             ]);
         // Verifica se o usuário foi criado no banco de dados
         $this->assertDatabaseHas('users', [
-            'email' => 'johndoe@example.com'
+            'email' => 'johndoe@gmail.com'
         ]);
         // Valida que a senha foi armazenada como hash
-        $user = User::where('email', 'johndoe@example.com')->first();
+        $user = User::where('email', 'johndoe@gmail.com')->first();
         $this->assertTrue(Hash::check('!Password123', $user->password));
     }
 
@@ -69,6 +69,7 @@ class UserControllerTest extends TestCase
         $password = 'Password!1';
         // Cria um usuário com uma senha conhecida
         $user = User::factory()->create([
+            'email' => $this->basePayload['email'],
             'password' => Hash::make($password),
         ]);
         // Tenta fazer o login com um usuário válido
@@ -95,7 +96,10 @@ class UserControllerTest extends TestCase
     {
         // Cria um usuário
         $password = 'correct-password';
-        $user = User::factory()->create(['password' => Hash::make($password)]);
+        $user = User::factory()->create([
+            'email' => $this->basePayload['email'],
+            'password' => Hash::make($password)
+        ]);
         // Tentar fazer o login com uma senha inválida
         $response = $this->postJson(route('user.login'), ['email' => $user->email, 'password' => 'wrong-password']);
         // Verifica o status e a estrutura da resposta
