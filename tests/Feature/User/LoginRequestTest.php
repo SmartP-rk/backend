@@ -68,4 +68,28 @@ class LoginRequestTest extends TestCase
             'Existem erros de validação não esperados'
         );
     }
+
+    public function test_password_is_string(){
+        $invalidPasswords = [
+            1,
+            1.5,
+            true,
+        ];
+        foreach($invalidPasswords as $password){
+            // Dados simulados para realizar login
+            $payload = $this->basePayload;
+            $payload['password'] = $password;
+            // Chama a rota users do método login com os dados
+            $response = $this->postJson(route('user.login'), $payload);
+            // Verifica a estrutura e conteúdo da resposta
+            $response->assertStatus(422)
+                ->assertJsonValidationErrors(['password' => 'A senha deve ser uma string']);
+            //Garante que não existem outros erros no JSON
+            $this->assertCount(
+                1,
+                $response->json('errors'),
+                'Existem erros de validação não esperados'
+            );
+        }
+    }
 }
