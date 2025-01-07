@@ -53,4 +53,13 @@ class ParkStoreRequestTest extends TestCase
             ->assertJsonValidationErrors(['proprietor' => 'O proprietário informado não existe'])
             ->assertJsonCount(1, 'errors');
     }
+
+    public function test_cnpj_is_required(): void{
+        $payload = $this->basePayload;
+        $payload['cnpj'] = '';
+        $response = $this->postJson(route('parks.store'), $payload);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['cnpj' => 'O campo CNPJ é obrigatório'])
+            ->assertJsonCount(1, 'errors');
+    }
 }
