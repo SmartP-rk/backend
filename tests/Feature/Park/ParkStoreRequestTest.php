@@ -125,4 +125,12 @@ class ParkStoreRequestTest extends TestCase
             $this->assertInvalidCNPJ($cnpj);
         }
     }
+
+    public function test_cnpj_with_invalid_data_types_fails(): void
+    {
+        $invalidDataTypes = [1, 0.5, true, false];
+        foreach ($invalidDataTypes as $cnpj) {
+            $this->assertInvalidCNPJ($cnpj);
+        }
+    }
 }
