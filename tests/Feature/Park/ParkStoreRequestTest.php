@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Park;
 
+use App\Models\Park;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -60,6 +61,18 @@ class ParkStoreRequestTest extends TestCase
         $response = $this->postJson(route('parks.store'), $payload);
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['cnpj' => 'O campo CNPJ é obrigatório'])
+            ->assertJsonCount(1, 'errors');
+    }
+
+    public function test_cnpj_is_unique(): void{
+        Park::factory()->create([
+            'cnpj' => '00.000.000/0000-00'
+        ]);
+        $payload = $this->basePayload;
+        $payload['cnpj'] = '00.000.000/0000-00';
+        $response = $this->postJson(route('parks.store'), $payload);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['cnpj' => 'Insira um CNPJ válido. Ex: 00.000.000/0000-00'])
             ->assertJsonCount(1, 'errors');
     }
 }
