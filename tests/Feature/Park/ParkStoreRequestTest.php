@@ -37,6 +37,16 @@ class ParkStoreRequestTest extends TestCase
         Sanctum::actingAs($this->user);
     }
 
+    private function assertInvalidCNPJ($cnpj): void
+    {
+        $payload = $this->basePayload;
+        $payload['cnpj'] = $cnpj;
+        $response = $this->postJson(route('parks.store'), $payload);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['cnpj' => 'Insira um CNPJ válido. Ex: 00.000.000/0000-00'])
+            ->assertJsonCount(1, 'errors');
+    }
+
     public function test_proprietor_is_required(): void{
         $payload = $this->basePayload;
         $payload['proprietor'] = '';
@@ -74,5 +84,33 @@ class ParkStoreRequestTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['cnpj' => 'Insira um CNPJ válido. Ex: 00.000.000/0000-00'])
             ->assertJsonCount(1, 'errors');
+    }
+
+    public function test_cnpj_with_incorrect_format_fails(): void
+    {
+        $invalidFormats = [
+            '00000.000/0000-00',
+            '00.000000/0000-00',
+            '00.000.0000000-00',
+            '00.000.000/000000',
+            '00000000/0000-00',
+            '000000000000-00',
+            '00000.0000000-00',
+            '00000.000/000000',
+            '00.0000000000-00',
+            '00.000000/000000',
+            '00.000.000000000',
+            '00.0000000000-00',
+            '00.000.000-0000/00',
+            '00.00.000/0000-00',
+            '00.000.000/0000',
+            '00.000.000/0000-000',
+            '000.000.000/0000-00',
+            '00000000000000',
+            '000000000000000',
+        ];
+        foreach ($invalidFormats as $cnpj) {
+            $this->assertInvalidCNPJ($cnpj,);
+        }
     }
 }
