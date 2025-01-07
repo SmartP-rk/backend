@@ -44,4 +44,13 @@ class ParkStoreRequestTest extends TestCase
             ->assertJsonValidationErrors(['proprietor' => 'O campo proprietário é obrigatório'])
             ->assertJsonCount(1, 'errors');
     }
+
+    public function test_proprietor_not_exists(): void{
+        $payload = $this->basePayload;
+        $payload['proprietor'] = 2;
+        $response = $this->postJson(route('parks.store'), $payload);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['proprietor' => 'O proprietário informado não existe'])
+            ->assertJsonCount(1, 'errors');
+    }
 }
