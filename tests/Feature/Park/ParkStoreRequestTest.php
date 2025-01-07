@@ -113,4 +113,16 @@ class ParkStoreRequestTest extends TestCase
             $this->assertInvalidCNPJ($cnpj,);
         }
     }
+
+    public function test_cnpj_with_non_numeric_characters_fails(): void
+    {
+        $nonNumeric = [
+            'AB.CDE.FGH/IJKL-MN',
+            '00.000.000/0000-AA',
+            '00.000.000/0000-!@',
+        ];
+        foreach ($nonNumeric as $cnpj) {
+            $this->assertInvalidCNPJ($cnpj);
+        }
+    }
 }
