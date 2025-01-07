@@ -133,4 +133,13 @@ class ParkStoreRequestTest extends TestCase
             $this->assertInvalidCNPJ($cnpj);
         }
     }
+
+    public function test_name_is_required(): void{
+        $payload = $this->basePayload;
+        $payload['name'] = '';
+        $response = $this->postJson(route('parks.store'), $payload);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['name' => 'O campo nome é obrigatório'])
+            ->assertJsonCount(1, 'errors');
+    }
 }
