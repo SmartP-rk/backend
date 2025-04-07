@@ -120,6 +120,18 @@ class UserControllerTest extends TestCase
             ->assertJson(['msg' => 'Email ou senha incorretos!']);
     }
 
+    public function test_login_fails_with_wrong_email_and_password(){
+        // Cria um usuário com uma senha e email conhecidos
+        $password = 'correct-password';
+        $email = 'teste@gmail.com';
+        $user = User::factory()->create(['password' => Hash::make($password), 'email' => $email]);
+        // Tentar fazer o login com um email e senha inválidos
+        $response = $this->postJson(route('user.login'), ['email' => 'wrong@gmail.com', 'password' => 'wrong-password']);
+        // Verifica o status e a estrutura da resposta
+        $response->assertStatus(401)
+            ->assertJson(['msg' => 'Email ou senha incorretos!']);
+    }
+
     public function test_refresh_token_successfully()
     {
         // Cria e autentica o usuário criado

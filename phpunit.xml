@@ -12,6 +12,7 @@
             <file>tests/Feature/User/UserStoreRequestTest.php</file>
             <file>tests/Feature/User/LoginRequestTest.php</file>
             <file>tests/Feature/User/UserControllerTest.php</file>
+            <file>tests/Feature/Park/ParkStoreRequestTest.php</file>
         </testsuite>
     </testsuites>
     <source>
