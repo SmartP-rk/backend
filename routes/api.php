@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\
-{
+use App\Http\Controllers\{
     ParkController,
     DriverController,
     UserController,
     VehicleController,
 };
+use App\Http\Controllers\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +14,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('drivers', DriverController::class);
     Route::apiResource('parks', ParkController::class);
@@ -28,3 +28,4 @@ Route::middleware('auth:sanctum')->group(function(){
 
 Route::apiResource('users', UserController::class)->only('store');
 Route::post('login', [UserController::class, 'login'])->name('user.login');
+Route::post('send-email-password', [SessionController::class, 'sendResetLinkEmail'])->name('session.sendResetLinkEmail');
