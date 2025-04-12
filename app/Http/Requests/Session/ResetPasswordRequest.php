@@ -31,8 +31,10 @@ class ResetPasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'token.required' => 'O campo token é obrigatório',
+            'token.string' => 'O token deve ser uma string',
             'email.required' => 'O campo email é obrigatório',
-            'email.email' => 'Insira um email válido',
+            'email.email' => 'Por favor, informe um email válido',
             'password.required' => 'O campo senha é obrigatório',
             'password.min' => 'A senha deve ter no minímo 8 caracteres',
             'password.regex' => 'A senha deve ter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caracter especial',

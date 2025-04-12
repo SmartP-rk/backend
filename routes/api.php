@@ -29,3 +29,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::apiResource('users', UserController::class)->only('store');
 Route::post('login', [UserController::class, 'login'])->name('user.login');
 Route::post('send-email-password', [SessionController::class, 'sendResetLinkEmail'])->name('session.sendResetLinkEmail');
+Route::post('reset-password', [SessionController::class, 'resetPassword'])->name('session.resetPassword');
