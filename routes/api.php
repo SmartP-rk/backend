@@ -7,12 +7,7 @@ use App\Http\Controllers\{
     VehicleController,
 };
 use App\Http\Controllers\SessionController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
@@ -30,3 +25,5 @@ Route::apiResource('users', UserController::class)->only('store');
 Route::post('login', [UserController::class, 'login'])->name('user.login');
 Route::post('send-email-password', [SessionController::class, 'sendResetLinkEmail'])->name('session.sendResetLinkEmail');
 Route::post('reset-password', [SessionController::class, 'resetPassword'])->name('session.resetPassword');
+Route::get('email-verify', [SessionController::class, 'emailVerify'])->name('sessions.emailVerify');
+Route::post('email-resend', [SessionController::class, 'resendEmailVerify'])->name('sessions.resendEmailVerify');
