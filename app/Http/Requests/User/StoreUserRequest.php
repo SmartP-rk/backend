@@ -24,14 +24,15 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|max:100|regex:/^[\pL\s]+$/u',
             'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+            'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W]{8,}$/',
             'cpf' => 'required|min:11|max:14|unique:users|regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
             'phone' => 'required|min:11|max:15',
             'user_type' => 'required|numeric|min:0|max:3'
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'name.required' => 'O campo nome é obrigatório',
             'name.max' => 'O nome deve ter 100 caracteres',
