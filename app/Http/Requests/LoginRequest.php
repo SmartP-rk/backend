@@ -22,12 +22,13 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required | email:rfc,dns',
+            'email' => 'required | email:rfc',
             'password' => 'required | string '
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'Por favor insira um email válido',
