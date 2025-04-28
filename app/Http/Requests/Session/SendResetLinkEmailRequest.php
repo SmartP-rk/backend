@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Session;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class SendResetLinkEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +22,15 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required | email:rfc',
-            'password' => 'required | string '
+            'email' => 'required | email'
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'email.required' => 'O campo email é obrigatório',
-            'email.email' => 'Por favor insira um email válido',
-            'password.required' => 'O campo senha é obrigatório',
-            'password.string' => 'A senha deve ser uma string',
+            'email.email' => 'Por favor, informe um email válido'
         ];
     }
 }

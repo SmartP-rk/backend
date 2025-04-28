@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('park');
             $table->string('name');
             $table->string('cpf');
             $table->string('phone');
+            $table->foreign('park')->references('id')->on('parks');
             $table->timestamps();
         });
     }

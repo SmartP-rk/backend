@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Park;
-use App\Http\Requests\StoreParkRequest;
-use App\Http\Requests\UpdateParkRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use App\Http\Requests\Park\{StoreParkRequest, UpdateParkRequest};
 
 class ParkController extends Controller
 {
@@ -16,11 +13,17 @@ class ParkController extends Controller
     }
     public function index()
     {
-        $parks = $this->park->all();
-        if($parks->isEmpty()){
-            return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
+        try {
+            $parks = $this->park->with('proprietor')->get();
+            if($parks->isEmpty()){
+                return response()->json(['error' => 'Não há estacionamentos cadastrados'], 404);
+            }
+            return response()->json( ['parks' => $parks], 200);
         }
-        return response()->json( ['parks' => $parks], 200);
+        catch(\Exception $exception) {
+            info('Exception in index method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -28,20 +31,28 @@ class ParkController extends Controller
      */
     public function store(StoreParkRequest $request)
     {
-        $park = $this->park->create($request->all());
-        return response()->json(['msg' => 'Estacionamento criado com sucesso', 'park' => $park], 201);
+        try {
+            $park = $this->park->create($request->validated());
+            return response()->json(['msg' => 'Estacionamento criado com sucesso', 'park' => $park], 201);
+        }
+        catch(\Exception $exception) {
+            info('Exception in store method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Park $park)
     {
-        $park = $this->park->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        try {
+            return response()->json(['park' => $park->load('proprietor')], 200);
         }
-        return response()->json(['park' => $park], 200);
+        catch(\Exception $exception) {
+            info('Exception in show method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
@@ -49,24 +60,29 @@ class ParkController extends Controller
      */
     public function update(UpdateParkRequest $request, Park $park)
     {
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        try {
+            $park->fill($request->validated());
+            $park->save();
+            return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
         }
-        $park->fill($request->all());
-        $park->save();
-        return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park], 200);
+        catch(\Exception $exception) {
+            info('Exception in store update park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Park $park)
     {
-        $park = $this->park->find($id);
-        if($park === null){
-            return response()->json(['error' => 'Estacionamento não encontrado'], 404);
+        try {
+            $park->delete();
+            return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
         }
-        $park->delete();
-        return response()->json(['msg' => 'Estacionamento excluído com sucesso'], 200);
+        catch(\Exception $exception) {
+            info('Exception in delete method park controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+        }
     }
 }

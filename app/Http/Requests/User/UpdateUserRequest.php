@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,12 +22,13 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|max:255',
+            'name' => 'sometimes|required|max:100|regex:/^[\pL\s]+$/u',
+            'surname' => 'sometimes|required|max:150|regex:/^[\pL\s]+$/u',
             'email' => 'sometimes|required|email',
             'password' => 'sometimes|required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
             'cpf' => 'sometimes|required|min:11|max:14|regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
             'phone' => 'sometimes|required|min:11|max:15',
-            'image' => 'sometimes|nullable|extensions:png,jpeg,jpg',
+            'image' => 'nullable|extensions:png,jpeg,jpg',
             'user_type' => 'sometimes|required|numeric|min:0|max:3'
         ];
     }
@@ -36,6 +37,10 @@ class UpdateUserRequest extends FormRequest
         return [
             'name.required' => 'O campo nome é obrigatório',
             'name.max' => 'O nome deve ter 255 caracteres',
+            'name.regex' => 'Por favor insira um nome válido',
+            'surname.required' => 'O campo sobrenome é obrigatório',
+            'surname.max' => 'O nome deve ter 150 caracteres',
+            'surname.regex' => 'Por favor insira um sobrenome válido',
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'Insira um email válido',
             'password.required' => 'O campo senha é obrigatório',

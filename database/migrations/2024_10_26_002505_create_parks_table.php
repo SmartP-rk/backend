@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('parks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('proprietor');
+            $table->unsignedBigInteger('proprietor');
             $table->string('cnpj');
             $table->string('phone');
             $table->string('zcode');
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('complement')->nullable();
             $table->integer('vacancy_count');
             $table->string('image')->nullable();
+            $table->foreign('proprietor')->references('id')->on('users');
             $table->timestamps();
         });
     }

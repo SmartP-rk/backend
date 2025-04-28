@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
-use App\Http\Requests\StoreDriverRequest;
-use App\Http\Requests\UpdateDriverRequest;
+use App\Http\Requests\Driver\{StoreDriverRequest, UpdateDriverRequest};
+use App\Models\Park;
+use Illuminate\Support\Facades\Hash;
 
 class DriverController extends Controller
 {
@@ -14,11 +15,19 @@ class DriverController extends Controller
     }
     public function index()
     {
-        $drivers = $this->driver->all();
+        $drivers = $this->driver->with('vehicles')->get();
         if($drivers->isEmpty()){
             return response()->json(['error' => 'Não há motoristas cadastrados'], 404);
         }
         return response()->json(['drivers' => $drivers], 200);
+    }
+
+    public function indexByPark(Park $park){
+        $drivers = $this->driver->where('park', '=', $park->id)->get();
+        if($drivers->isEmpty()){
+            return response()->json(['error' => 'Não há motoristas cadastrados'], 404);
+        }
+        return response()->json(['drivers' => $drivers->load('vehicles')], 200);
     }
 
     /**
@@ -33,38 +42,26 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
-        return response()->json(['driver' => $driver], 200);
+        return response()->json(['driver' => $driver->load('vehicles')], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDriverRequest $request, $id)
+    public function update(UpdateDriverRequest $request, Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
-        $driver->fill($request->all());
+        $driver->fill($request->validated());
         $driver->save();
-        return response()->json(['msg' => 'Motorista atualizado com sucesso', 'driver' => $driver], 200);
+        return response()->json(['msg' => 'Motorista atualizado com sucesso', 'driver' => $driver->load('vehicles')], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Driver $driver)
     {
-        $driver = $this->driver->find($id);
-        if($driver === null){
-            return response()->json(['error' => 'Motorista não encontrado'], 404);
-        }
         $driver->delete();
         return response()->json(['msg' => 'Motorista excluído com sucesso'], 200);
     }
