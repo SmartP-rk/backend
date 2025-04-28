@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\URL;
 class CustomVerifyEmail extends Notification implements ShouldQueue
 {
     use Queueable;
+    public $tries = 3;
+    public $backoff = 30;
 
     /**
      * Create a new notification instance.
@@ -50,7 +52,7 @@ class CustomVerifyEmail extends Notification implements ShouldQueue
     {
         $signedUrl = URL::temporarySignedRoute(
             'sessions.emailVerify',
-            Carbon::now()->addMinutes(config('auth.verification.expire', 1)),
+            Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),

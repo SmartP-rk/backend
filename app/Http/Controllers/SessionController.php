@@ -69,11 +69,9 @@ class SessionController extends Controller
         }
     }
 
-    public function resendEmailVerify(ResendEmailVerifyRequest $request)
+    public function resendEmailVerify(User $user)
     {
-        $user = User::where('email', $request->get('email'))->first();
-        if (!$user) return response()->json(['message' => 'Usuário não encontrado.'], 404);
-        if ($user->hasVerifiedEmail()) return response()->json(['message' => 'Este e-mail já foi verificado.'], 400);
+        if ($user->hasVerifiedEmail()) return response()->json(['message' => 'Este e-mail já foi verificado.']);
         $user->sendEmailVerificationNotification();
         return response()->json(['message' => 'E-mail de verificação reenviado com sucesso!']);
     }
