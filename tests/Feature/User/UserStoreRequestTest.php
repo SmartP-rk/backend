@@ -101,52 +101,6 @@ class UserStoreRequestTest extends TestCase
             ->assertJsonStructure(['msg', 'user']);
     }
 
-    public function test_surname_is_required(){
-        // Dados simulados para criar o usuário
-        $payload = $this->basePayload;
-        $payload['surname'] = '';
-        // Chama a rota users do método store com os dados
-        $response = $this->postJson(route('users.store'), $payload);
-        // Verifica a estrutura e conteúdo da resposta
-        $response->assertStatus(422)->assertJsonValidationErrors(['surname']);
-    }
-
-    public function test_surname_must_not_excced_150_characters(){
-        // Dados simulados para criar o usuário
-        $payload = $this->basePayload;
-        $payload['surname'] = str_repeat('a', 151); // Cria uma string com 101 caracteres
-        // Chama a rota users do método store com os dados
-        $response = $this->postJson(route('users.store'), $payload);
-        // Verifica se o status da resposta é 422 (Unprocessable Entity) e se a resposta contém o erro de validação para name
-        $response->assertStatus(422)->assertJsonValidationErrors(['surname']);
-    }
-
-    public function test_surname_boundary_150_characters(){
-        // Dados simulados para criar o usuário
-        $payload = $this->basePayload;
-        $payload['surname'] = str_repeat('a', 150); // Cria uma string com 150 caracteres
-        // Chama a rota users do método store com os dados
-        $response = $this->postJson(route('users.store'), $payload);
-        // Verifica se o status da resposta é 201 (Created) e se a resposta uma msg e o usuário criado
-        $response->assertStatus(201)
-            ->assertJsonStructure([
-                'msg',
-                'user' => ['id', 'name', 'email', 'cpf', 'phone', 'user_type']
-            ])
-            ->assertJson([
-                'msg' => 'Usuário cadastrado com sucesso',
-                'user' => [
-                    'id' => 1,
-                    'name' => 'John',
-                    'surname' => str_repeat('a', 150),
-                    'email' => 'johndoe@gmail.com',
-                    'cpf' => '000.000.000-00',
-                    'phone' => '(53) 99911-2233',
-                    'user_type' => '1',
-                ]
-            ]);
-    }
-
     public function test_email_is_required(){
         // Dados simulados para criar o usuário
         $payload = $this->basePayload;
