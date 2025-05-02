@@ -22,4 +22,4 @@ jobs:
 
       - name: Enviar arquivos via SCP
         run: |
-          rsync -avz --delete --exlude=".env" ./ matheus@187.86.158.87:/home/matheus/web/api.searchpark.com.br/public_html && && ssh matheus@187.86.158.87 "cd /home/matheus/web/api.searchpark.com.br/public_html && composer install"
+          rsync -avz --delete --exlude=".env" ./ matheus@187.86.158.87:/home/matheus/web/api.searchpark.com.br/public_html && ssh matheus@187.86.158.87 "cd /home/matheus/web/api.searchpark.com.br/public_html && composer install"
