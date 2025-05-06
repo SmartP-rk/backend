@@ -61,6 +61,6 @@ class CustomVerifyEmail extends Notification implements ShouldQueue
         // Extrai a query string da URL gerada (expires, signature, etc.)
         $query = parse_url($signedUrl, PHP_URL_QUERY);
         // Monta a URL que será enviada ao frontend
-        return config('app.frontend_url', 'http://localhost:3000') . '/email-verify?' . $query;
+        return env('FRONTEND_URL', 'http://localhost:5173') . '/email-verify?' . $query;
     }
 }

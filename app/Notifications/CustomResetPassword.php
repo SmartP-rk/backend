@@ -17,7 +17,7 @@ class CustomResetPassword extends ResetPassword implements ShouldQueue
      */
     public function toMail($notifiable): MailMessage
     {
-        $frontendUrl = config('app.frontend_url', 'http://localhost:3000');
+        $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
         $url = $frontendUrl . '/reset-password?token=' . $this->token;
         return (new MailMessage)
             ->subject('Redefinição de senha - SearchPark')
