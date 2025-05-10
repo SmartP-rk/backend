@@ -22,7 +22,44 @@ class UpdateParkRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'sometimes|required|max:255',
+            'phone' => 'sometimes|required|max:15',
+            'zcode' => 'sometimes|required|regex:/^(\d{5})\-(\d{3})$/',
+            'state' => 'sometimes|required|max:255',
+            'city' => 'sometimes|required|max:255',
+            'neighborhood' => 'sometimes|required|max:255',
+            'street' => 'sometimes|required|max:255',
+            'number' => 'sometimes|required|max:255',
+            'complement' => 'nullable|max:255',
+            'vacancy_count' => 'sometimes|required|numeric|min:1',
+            'image' => 'nullable|extensions:jpg,png,jpeg,svg,webp'
+        ];
+    }
 
+    public function messages()
+    {
+        return [
+            'name.required' => 'O campo nome é obrigatório',
+            'name.max' => 'O nome deve ter no máximo 255 caracteres',
+            'phone.required' => 'O campo telefone é obrigatório',
+            'phone.max' => 'O telefone deve ter no máximo 14 caracteres',
+            'zcode.required' => 'O campo CEP é obrigatório',
+            'zcode.regex' => 'Insira um CEP válido. Ex: 00000-000',
+            'state.required' => 'O campo estado é obrigatório',
+            'state.max' => 'O estado deve ter no máximo 255 caracteres',
+            'city.required' => 'O campo cidade é obrigatório',
+            'city.max' => 'A cidade deve ter no máximo 255 caracteres',
+            'neighborhood.required' => 'O campo bairro é obrigatório',
+            'neighborhood.max' => 'O bairro deve ter no máximo 255 caracteres',
+            'street.required' => 'O campo rua é obrigatório',
+            'street.max' => 'A rua deve ter no máximo 255 caracteres',
+            'number.required' => 'O campo número é obrigatório',
+            'number.max' => 'O número deve ter no máximo 255 caracteres',
+            'complement.max' => 'O complemento deve ter no máximo 255 caracteres',
+            'vacancy_count.required' => 'O campo quantida de vagas é obrigatório',
+            'vacancy_count.numeric' => 'A quantida de vagas deve ser do tipo númerico',
+            'vacancy_count.min' => 'O estacionamento deve ter pelo menos 1 vaga',
+            'image.extensions' => 'A extensão da imagem deve ser jpg, png, jpeg, svg ou webp',
         ];
     }
 }

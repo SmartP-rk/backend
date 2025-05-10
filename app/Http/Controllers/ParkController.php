@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Park;
 use App\Http\Requests\Park\{StoreParkRequest, UpdateParkRequest};
+use Illuminate\Support\Facades\Storage;
 
 class ParkController extends Controller
 {
@@ -63,8 +64,16 @@ class ParkController extends Controller
     public function update(UpdateParkRequest $request, Park $park)
     {
         try {
+            $oldImage = $park->image;
             $park->fill($request->validated());
             $park->save();
+            if ($request->hasFile('image')) {
+                if ($oldImage) {
+                    Storage::disk('public')->delete($oldImage);
+                }
+                $park->image = $request->file('image')->store('images/parks', 'public');
+                $park->save();
+            }
             return response()->json(['msg' => 'Estacionamento atualizado com sucesso', 'park' => $park->load('proprietor')], 200);
         } catch (\Exception $exception) {
             info('Exception in store update park controller: ' . $exception);
