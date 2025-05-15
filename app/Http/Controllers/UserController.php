@@ -25,7 +25,7 @@ class UserController extends Controller
             return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
         } catch (\Exception $exception) {
             info('Exception in store method user controller: ' . $exception);
-            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!']);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
         }
     }
 

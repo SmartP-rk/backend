@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
@@ -23,11 +24,24 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|max:100|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W]{8,}$/',
-            'cpf' => 'required|min:11|max:14|unique:users|regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
+            'email' => [
+                'required_unless:user_type,3',
+                'email:rfc,dns',
+                Rule::unique('users')
+                    ->where('user_type', $this->input('user_type'))
+            ],
+            'password' => 'required_unless:user_type,3|min:8|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d\s])[A-Za-z\d\W]{8,}$/',
+            'cpf' => [
+                'required',
+                'min:11',
+                'max:14',
+                'regex:/^(\d{3})\.(\d{3})\.(\d{3})\-(\d{2})$/',
+                Rule::unique('users')
+                    ->where('user_type', $this->input('user_type'))
+            ],
             'phone' => 'required|min:11|max:15',
-            'user_type' => 'required|numeric|min:0|max:3'
+            'user_type' => 'required|numeric|min:1|max:3',
+            'parcial_registration' => 'required_if:user_type,3|boolean',
         ];
     }
 
@@ -53,8 +67,10 @@ class StoreUserRequest extends FormRequest
             'phone.max' => 'O telefone deve ter no máximo 15',
             'user_type.required' => 'O campo tipo de usuário é obrigatório',
             'user_type.numeric' => 'O tipo de usuário deve ser um número',
-            'user_type.min' => 'O tipo de usuário deve ser entre 0 e 3',
-            'user_type.max' => 'O tipo de usuário deve ser entre 0 e 3'
+            'user_type.min' => 'O tipo de usuário deve ser entre 1 e 3',
+            'user_type.max' => 'O tipo de usuário deve ser entre 1 e 3',
+            'parcial_registration.required_if' => 'O campo cadastro parcial é obrigatório',
+            'parcial_registration.boolean' => 'O campo cadastro parcial deve ser verdadeiro ou falso',
         ];
     }
 }

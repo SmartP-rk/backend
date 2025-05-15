@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'cpf' => fake()->unique()->numerify('###.###.###-##'),
             'phone' => fake()->phoneNumber(),
-            'user_type' => fake()->numberBetween(0, 3),
+            'user_type' => fake()->numberBetween(1, 3),
             'image' => fake()->imageUrl()
         ];
     }
@@ -41,7 +41,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

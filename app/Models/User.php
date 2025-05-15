@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,10 +25,11 @@ class User extends Authenticatable implements CanResetPasswordContract, MustVeri
 
     protected $fillable = [
         'name',
-        'email',
-        'password',
         'cpf',
         'phone',
+        'email',
+        'password',
+        'parcial_registration',
         'user_type',
         'image'
     ];
@@ -71,5 +70,10 @@ class User extends Authenticatable implements CanResetPasswordContract, MustVeri
     public function park()
     {
         return $this->hasOne(Park::class, 'proprietor');
+    }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class, 'driver_id');
     }
 }

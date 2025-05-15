@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\{
     ParkController,
-    DriverController,
     UserController,
     VehicleController,
 };
@@ -11,9 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
-    Route::apiResource('drivers', DriverController::class);
     Route::apiResource('parks', ParkController::class);
-    Route::get('park/{park}/drivers', [DriverController::class, 'indexByPark'])->name('park.drivers.index');
     Route::apiResource('vehicles', VehicleController::class);
     Route::get('parks/{park}/vehicles', [VehicleController::class, 'indexByPark'])->name('parks.vehicles.index');
     Route::post('refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');

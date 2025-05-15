@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('cpf')->unique();
-            $table->string('email')->unique();
+            $table->string('cpf');
             $table->string('phone');
-            $table->string('image')->nullable();
-            $table->string('user_type');
+            $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->integer('user_type')->min(1)->max(3)->comment('1: Proprietário, 2: Operador, 3: Motorista');
+            $table->boolean('parcial_registration')->default(false);
+            $table->string('image')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\{
     User,
-    Driver,
     Vehicle,
     Park
 };
@@ -19,14 +18,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(5)
-        ->has(
-            Park::factory()
-                ->has(
-                    Driver::factory(10)
-                        ->has(Vehicle::factory(2), 'vehicles'), // Adiciona 2 veículos por motorista
-                    'drivers'
-                )
-        )
-        ->create();
+            ->has(
+                Park::factory()
+            )
+            ->create();
+        User::factory(5)
+            ->has(
+                Vehicle::factory(2), // Adiciona 2 veículos por motorista
+                'vehicles'
+            )->create([
+                'user_type' => 3, // Motorista
+            ]);
     }
 }
