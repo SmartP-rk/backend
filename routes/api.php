@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
+    Route::get('drivers', [UserController::class, 'driverIndex'])->name('users.driver.index');
     Route::apiResource('parks', ParkController::class);
     Route::apiResource('vehicles', VehicleController::class);
     Route::get('parks/{park}/vehicles', [VehicleController::class, 'indexByPark'])->name('parks.vehicles.index');

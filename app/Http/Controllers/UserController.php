@@ -17,6 +17,20 @@ class UserController extends Controller
         $this->user = $user;
     }
 
+    public function driverIndex()
+    {
+        try {
+            $drivers = $this->user->where('user_type', '=', 3)->with('vehicles')->paginate(10);
+            if ($drivers->isEmpty()) {
+                return response()->json(['msg' => 'Nenhum motorista encontrado'], 404);
+            }
+            return response()->json(['drivers' => $drivers], 200);
+        } catch (\Exception $exception) {
+            info('Exception in index method user controller: ' . $exception);
+            return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
+        }
+    }
+
     public function store(StoreUserRequest $request)
     {
         try {
