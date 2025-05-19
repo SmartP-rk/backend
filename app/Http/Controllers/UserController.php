@@ -36,7 +36,20 @@ class UserController extends Controller
         try {
             $user = $this->user->create($request->validated());
             $user->sendEmailVerificationNotification();
-            return response()->json(['msg' => 'Usuário cadastrado com sucesso', 'user' => $user], 201);
+            switch ($user->user_type) {
+                case 1:
+                    $message = 'Proprietário cadastrado com sucesso';
+                    break;
+                case 2:
+                    $message = 'Operador cadastrado com sucesso';
+                    break;
+                case 3:
+                    $message = 'Motorista cadastrado com sucesso';
+                    break;
+                default:
+                    $message = 'Usuário cadastrado com sucesso';
+            }
+            return response()->json(['msg' => $message, 'user' => $user], 201);
         } catch (\Exception $exception) {
             info('Exception in store method user controller: ' . $exception);
             return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
@@ -65,7 +78,20 @@ class UserController extends Controller
                 $user->image = $request->file('image')->store('images/users', 'public');
                 $user->save();
             }
-            return response()->json(['msg' => 'Usuário atualizado com sucesso', 'user' => $user], 200);
+            switch ($user->user_type) {
+                case 1:
+                    $message = 'Proprietário atualizado com sucesso';
+                    break;
+                case 2:
+                    $message = 'Operador atualizado com sucesso';
+                    break;
+                case 3:
+                    $message = 'Motorista atualizado com sucesso';
+                    break;
+                default:
+                    $message = 'Usuário atualizado com sucesso';
+            }
+            return response()->json(['msg' => $message, 'user' => $user], 200);
         } catch (\Exception $exception) {
             info('Exception in update method user controller: ' . $exception);
             return response()->json(['error' => 'Ocorreu um erro inesperado. Por favor contato a equipe de desenvolvimento!'], 500);
