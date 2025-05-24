@@ -7,7 +7,6 @@ use App\Models\{
     Vehicle,
     Park
 };
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,5 +28,8 @@ class DatabaseSeeder extends Seeder
             )->create([
                 'user_type' => 3, // Motorista
             ]);
+        $this->call([
+            BrandSeeder::class,
+        ]);
     }
 }
