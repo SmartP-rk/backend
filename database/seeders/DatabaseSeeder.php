@@ -28,8 +28,12 @@ class DatabaseSeeder extends Seeder
             )->create([
                 'user_type' => 3, // Motorista
             ]);
+
         $this->call([
             BrandSeeder::class,
+        ]);
+        $this->call([
+            VehiclesModelSeeder::class,
         ]);
     }
 }
