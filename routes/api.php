@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\{
+    BrandController,
     ParkController,
     UserController,
     VehicleController,
 };
 use App\Http\Controllers\SessionController;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -14,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('parks', ParkController::class);
     Route::apiResource('vehicles', VehicleController::class);
     Route::get('parks/{park}/vehicles', [VehicleController::class, 'indexByPark'])->name('parks.vehicles.index');
+    Route::apiResource('brands', BrandController::class)->only(['index', 'show']);
     Route::post('refresh-token', [UserController::class, 'refreshToken'])->name('user.refreshToken');
     Route::post('logout', [UserController::class, 'logout'])->name('user.logout');
     Route::post('destruct-all-tokens', [UserController::class, 'destructAllTokens'])->name('user.destructAllTokens');
